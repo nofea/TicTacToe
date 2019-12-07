@@ -1,5 +1,10 @@
 #include "Player.hpp"
 
+
+Player::Player()
+{
+}
+
 Player::Player(int iPlayerChoice)
 {
     iPlayable = iPlayerChoice;

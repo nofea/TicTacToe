@@ -7,4 +7,6 @@ enum Playable
     Playable_O
 };
 
+#define LOGGERPATHNAME "log.txt"
+
 #endif

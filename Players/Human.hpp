@@ -6,10 +6,17 @@
 class Human : Player
 {
 private:
-    /* data */
+    int iPlayable;
 public:
-    Human(/* args */);
+    Human();
+    Human(int iPlayerChoice);
+    Human(const Player &obj); // copy constructor
+    Human& operator= (const Player &obj); //assingment operator
     ~Human();
+
+public:
+    void SetPlayable(int iPlayerChoice);
+    int GetPlayable();
 };
 
 #endif

@@ -6,10 +6,17 @@
 class ComputerBlocker : Player
 {
 private:
-    /* data */
+    int iPlayable;
 public:
-    ComputerBlocker(/* args */);
+    ComputerBlocker();
+    ComputerBlocker(int iPlayerChoice);
+    ComputerBlocker(const ComputerBlocker& obj);
+    ComputerBlocker& operator= (const ComputerBlocker& obj);
     ~ComputerBlocker();
+
+public:
+    void SetPlayable(int iPlayerChoice);
+    int GetPlayable();
 };
 
 #endif
