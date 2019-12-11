@@ -31,5 +31,5 @@ void ComputerBlocker::SetPlayable(int iPlayerChoice)
 
 int ComputerBlocker::GetPlayable()
 {
-    return(iPlayable)
+    return(iPlayable);
 }

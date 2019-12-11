@@ -32,5 +32,5 @@ void Human::SetPlayable(int iPlayerChoice)
 
 int Human::GetPlayable()
 {
-    return(iPlayable)
+    return(iPlayable);
 }

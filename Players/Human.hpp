@@ -10,8 +10,8 @@ private:
 public:
     Human();
     Human(int iPlayerChoice);
-    Human(const Player &obj); // copy constructor
-    Human& operator= (const Player &obj); //assingment operator
+    Human(const Human& obj); // copy constructor
+    Human& operator= (const Human& obj); //assingment operator
     ~Human();
 
 public:
