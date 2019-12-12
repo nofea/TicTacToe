@@ -26,10 +26,10 @@ $(BUILD_DIR)/%.cpp.o: %.cpp
 # assembly
 $(BUILD_DIR)/%.s.o: %.s
 	$(MKDIR_P) $(dir $@)
-	$(AS) $(ASFLAGS) -c $< -o $@
+	$(AS) $(ASFLAGS) -c $< -o $@ $(LIBS)
 
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
-	$(CC) $(OBJS) -o $@ $(LDFLAGS)
+	$(CC) $(OBJS) -o $@ $(LDFLAGS) $(LIBS)
 
 
 .PHONY: clean
