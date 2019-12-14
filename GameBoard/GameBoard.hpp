@@ -16,7 +16,7 @@ private:
 
 private:
     GameBoard();
-    bool SaveVictorySet(MatrixDimensions Dimension, int iIndex);
+    bool SaveVictorySet(MatrixProperties Property, int iIndex);
 
 public:   
     GameBoard(int iSize);
@@ -28,6 +28,8 @@ public:
     bool InitGameBoard();
     bool IsEndOfGame();
     std::list<std::pair<int,int>> GetVictorySet();
+    bool MarkBoard(std::pair<int,int> pairCoordinates, int iMark);
+    std::vector<std::vector<int>> ShowGameBoard();
 };
 
 #endif

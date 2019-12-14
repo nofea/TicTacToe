@@ -16,7 +16,16 @@ int main()
     ComputerBlocker CB;
     Logger Log;
 
-    Log.OpenLoggerFile(LOGGERPATHNAME);
+    try
+    {
+        Log.OpenLoggerFile(LOGGERPATHNAME);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << endl;
+    }
+    
+    
 
     cout << "Welcome to a game of Tic Tac Toe" << endl;
     while (1)
@@ -45,9 +54,16 @@ int main()
     
     Log.LogMessage("The Human chose: "+ to_string(H1.GetPlayable()));
     Log.LogMessage("The Computer was given: "+ to_string(CB.GetPlayable()));
+
+    GameBoard GB(DEFAULTGAMEBOARDSIZE);
+    Log.LogMessage("Game Board Initialized with size: "+ to_string(DEFAULTGAMEBOARDSIZE));
     
     cout << "X goes first" << endl;
 
+    while (!GB.IsEndOfGame())
+    {
+        
+    }
     
     
     Log.CloseLoggerFile();

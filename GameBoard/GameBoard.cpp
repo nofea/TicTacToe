@@ -81,12 +81,71 @@ bool GameBoard::IsEndOfGame()
     return retVal;
 }
 
-bool GameBoard::SaveVictorySet(MatrixDimensions Dimension, int iIndex)
+bool GameBoard::SaveVictorySet(MatrixProperties Property, int iIndex)
 {
+    switch(Property)
+    {
+        case MatrixProperties_Row:
+        for(int iCount = 0; iCount < iBoardSize; iCount++)
+        {
+            listVictorySet.push_back(pair<int,int> {iIndex, iCount});
+        }
+        break;
+
+        case MatrixProperties_Column:
+        for(int iCount = 0; iCount < iBoardSize; iCount++)
+        {
+            listVictorySet.push_back(pair<int,int> {iCount, iIndex});
+        }
+        break;
+
+        case MatrixProperties_PrimaryDiagonal:
+        for(int iCount = 0; iCount < iBoardSize; iCount++)
+        {
+            listVictorySet.push_back(pair<int,int> {iCount, iCount});
+        }
+        break;
+
+        case MatrixProperties_SecondaryDiagonal:
+        for(int iCount = 0; iCount < iBoardSize; iCount++)
+        {
+            for(int jCount = (iBoardSize - 1); jCount >= 0; jCount--)
+            {
+                listVictorySet.push_back(pair<int,int> {iCount, jCount});
+            }
+        }
+        break;
+
+        default:
+        return false;
+        break;
+    }
     return true;
 }
 
 list<pair<int,int>> GameBoard::GetVictorySet()
 {
     return listVictorySet;
+}
+
+bool GameBoard::MarkBoard(pair<int,int> pairCoordinates, int iMark)
+{ 
+    bool bRetVal = true;
+
+    if(vecGameBoard.at(pairCoordinates.first).at(pairCoordinates.second) == Playable_X
+     || vecGameBoard.at(pairCoordinates.first).at(pairCoordinates.second) == Playable_O)
+     {
+         bRetVal = false;
+     }
+     else
+     {
+         vecGameBoard.at(pairCoordinates.first).at(pairCoordinates.second) = iMark;
+     }
+     
+    return bRetVal;
+}
+
+vector<std::vector<int>> GameBoard::ShowGameBoard()
+{
+    return vecGameBoard;
 }

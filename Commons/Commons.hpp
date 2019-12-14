@@ -12,10 +12,12 @@ enum Playable
     Playable_O
 };
 
-enum MatrixDimensions
+enum MatrixProperties
 {
-    MatrixDimensions_Row,
-    MatrixDimensions_Column
+    MatrixProperties_Row,
+    MatrixProperties_Column,
+    MatrixProperties_PrimaryDiagonal,
+    MatrixProperties_SecondaryDiagonal
 };
 
 #endif
