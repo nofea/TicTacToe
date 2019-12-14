@@ -13,10 +13,11 @@ private:
     int iBoardSize;
     std::vector<std::vector<int>> vecGameBoard;
     std::list<std::pair<int,int>> listVictorySet;
+    int iWinningPlayable;
 
 private:
     GameBoard();
-    bool SaveVictorySet(MatrixProperties Property, int iIndex);
+    bool SaveVictorySet(MatrixProperties Property, int& iIndex);
 
 public:   
     GameBoard(int iSize);
@@ -28,7 +29,7 @@ public:
     bool InitGameBoard();
     bool IsEndOfGame();
     std::list<std::pair<int,int>> GetVictorySet();
-    bool MarkBoard(std::pair<int,int> pairCoordinates, int iMark);
+    bool MarkBoard(std::pair<int,int>& pairCoordinates, int& iMark);
     std::vector<std::vector<int>> ShowGameBoard();
 };
 

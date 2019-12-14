@@ -5,6 +5,7 @@ using namespace std;
 GameBoard::GameBoard()
 {
     iBoardSize = 0;
+    iWinningPlayable = -1;
 }
 
 GameBoard::~GameBoard()
@@ -14,17 +15,24 @@ GameBoard::~GameBoard()
 GameBoard::GameBoard(int iSize)
 {
     iBoardSize = iSize;
+    iWinningPlayable = -1;
     InitGameBoard();
 }
 
 GameBoard::GameBoard(const GameBoard& obj)
 {
     iBoardSize = obj.iBoardSize;
+    iWinningPlayable = obj.iWinningPlayable;
+    vecGameBoard = obj.vecGameBoard;
+    listVictorySet = obj.listVictorySet;
 }
 
 GameBoard& GameBoard::operator= (const GameBoard& obj)
 {
     iBoardSize = obj.iBoardSize;
+    iWinningPlayable = obj.iWinningPlayable;
+    vecGameBoard = obj.vecGameBoard;
+    listVictorySet = obj.listVictorySet;
     return *this;
 }
 
@@ -43,45 +51,113 @@ bool GameBoard::InitGameBoard()
 bool GameBoard::IsEndOfGame()
 {
     bool retVal = false;
-    list<int> listX, listO;
+    int iTemp = GAMEBOARDINITVALUE;
+    list<int> listRowX, listRowO, listColX, listColO, listPDiaX, listPDiaO, listSDiaX, listSDiaO;
     
-    //check the rows
-    for(auto it = vecGameBoard.begin(); it != vecGameBoard.end(); ++it)
+    
+    for(int i = 0, k = iBoardSize - 1; i < iBoardSize, k >= 0; i++, k--)
     {
-        for(auto jt = it->begin(); jt != it->end(); ++jt)
+        //check the rows and cols
+        for(int j = 0; j < iBoardSize; j++)
         {
-            if(*jt == Playable_X)
+            if(vecGameBoard.at(i).at(j) == Playable_X)
             {
-                listX.push_back(Playable_X);
+                listRowX.push_back(Playable_X);
             }
-            else if(*jt == Playable_O)
+            else if(vecGameBoard.at(i).at(j) == Playable_O)
             {
-                listO.push_back(Playable_O);
+                listRowO.push_back(Playable_O);
+            }
+
+            if(vecGameBoard.at(j).at(i) == Playable_X)
+            {
+                listColX.push_back(Playable_X);
+            }
+            else if(vecGameBoard.at(j).at(i) == Playable_O)
+            {
+                listColO.push_back(Playable_O);
             }
         }
 
-        if(listX.size() == iBoardSize)
+        if(listRowX.size() == iBoardSize)
         {
-            retVal = true;
-            break;
+            SaveVictorySet(MatrixProperties_Row, i);
+            return true;
         }
-        else if(listO.size() == iBoardSize)
+        else if(listRowO.size() == iBoardSize)
         {
-            retVal = true;
-            break;
+            SaveVictorySet(MatrixProperties_Row, i);
+            return true;
+        }
+        else if(listColX.size() == iBoardSize)
+        {
+            SaveVictorySet(MatrixProperties_Column, i);
+            return true;
+        }
+        else if(listColO.size() == iBoardSize)
+        {
+            SaveVictorySet(MatrixProperties_Column, i);
+            return true;
         }
         else
         {
-            listX.clear();
-            listO.clear();
+            listRowX.clear();
+            listRowO.clear();
+            listColX.clear();
+            listColO.clear();
         }
-        
+
+        if(vecGameBoard.at(i).at(i) == Playable_X)
+        {
+            listPDiaX.push_back(Playable_X);
+        }
+        else if(vecGameBoard.at(i).at(i) == Playable_O)
+        {
+            listPDiaO.push_back(Playable_O);
+        }
+
+        if(vecGameBoard.at(i).at(k) == Playable_X)
+        {
+            listSDiaX.push_back(Playable_X);
+        }
+        else if(vecGameBoard.at(i).at(k) == Playable_O)
+        {
+            listSDiaO.push_back(Playable_O);
+        }
+    }
+
+    if(listPDiaX.size() == iBoardSize)
+    {
+        SaveVictorySet(MatrixProperties_PrimaryDiagonal, iTemp);
+        retVal = true;
+    }
+    else if(listPDiaO.size() == iBoardSize)
+    {
+        SaveVictorySet(MatrixProperties_PrimaryDiagonal, iTemp);
+        retVal = true;
+    }
+    else if(listSDiaX.size() == iBoardSize)
+    {
+        SaveVictorySet(MatrixProperties_SecondaryDiagonal, iTemp);
+        retVal = true;
+    }
+    else if(listSDiaO.size() == iBoardSize)
+    {
+        SaveVictorySet(MatrixProperties_SecondaryDiagonal, iTemp);
+        retVal = true;
+    }
+    else
+    {
+        listPDiaX.clear();
+        listPDiaO.clear();
+        listSDiaX.clear();
+        listSDiaO.clear();
     }
 
     return retVal;
 }
 
-bool GameBoard::SaveVictorySet(MatrixProperties Property, int iIndex)
+bool GameBoard::SaveVictorySet(MatrixProperties Property, int& iIndex)
 {
     switch(Property)
     {
@@ -107,12 +183,9 @@ bool GameBoard::SaveVictorySet(MatrixProperties Property, int iIndex)
         break;
 
         case MatrixProperties_SecondaryDiagonal:
-        for(int iCount = 0; iCount < iBoardSize; iCount++)
+        for(int iCount = 0, jCount = (iBoardSize - 1); iCount < iBoardSize, jCount >= 0; iCount++, jCount--)
         {
-            for(int jCount = (iBoardSize - 1); jCount >= 0; jCount--)
-            {
-                listVictorySet.push_back(pair<int,int> {iCount, jCount});
-            }
+            listVictorySet.push_back(pair<int,int> {iCount, jCount});    
         }
         break;
 
@@ -128,7 +201,7 @@ list<pair<int,int>> GameBoard::GetVictorySet()
     return listVictorySet;
 }
 
-bool GameBoard::MarkBoard(pair<int,int> pairCoordinates, int iMark)
+bool GameBoard::MarkBoard(pair<int,int>& pairCoordinates, int& iMark)
 { 
     bool bRetVal = true;
 
