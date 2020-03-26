@@ -17,7 +17,8 @@ public:
 public:
     bool OpenLoggerFile(string sFilePathName);
     bool LogMessage(string sMessage);
-    bool LogError(string sError);
+    bool LogMessage(string sMessage, signed int& iTurnCount);
+    bool LogError(string sError, signed int& iTurnCount);
     bool CloseLoggerFile();
 };
 

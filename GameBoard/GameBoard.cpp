@@ -51,9 +51,9 @@ bool GameBoard::InitGameBoard()
 bool GameBoard::IsEndOfGame()
 {
     bool retVal = false;
+    bool bFull = true;
     int iTemp = GAMEBOARDINITVALUE;
-    list<int> listRowX, listRowO, listColX, listColO, listPDiaX, listPDiaO, listSDiaX, listSDiaO;
-    
+    list<int> listRowX, listRowO, listColX, listColO, listPDiaX, listPDiaO, listSDiaX, listSDiaO;   
     
     for(int i = 0, k = iBoardSize - 1; i < iBoardSize, k >= 0; i++, k--)
     {
@@ -154,6 +154,23 @@ bool GameBoard::IsEndOfGame()
         listSDiaO.clear();
     }
 
+    //check if the game board is full
+    if(!retVal)
+    {
+        for(auto it = vecGameBoard.begin(); it != vecGameBoard.end(); ++it)
+        {
+            for(auto jt = it->begin(); jt != it->end(); ++jt)
+            {
+                if (*jt == GAMEBOARDINITVALUE)
+                {
+                    bFull = false;
+                    break;
+                }
+            }
+        }
+        retVal = bFull;
+    }
+
     return retVal;
 }
 
@@ -201,12 +218,11 @@ list<pair<int,int>> GameBoard::GetVictorySet()
     return listVictorySet;
 }
 
-bool GameBoard::MarkBoard(pair<int,int>& pairCoordinates, int& iMark)
+bool GameBoard::MarkBoard(const pair<signed int, signed int>& pairCoordinates, const signed int& iMark)
 { 
     bool bRetVal = true;
 
-    if(vecGameBoard.at(pairCoordinates.first).at(pairCoordinates.second) == Playable_X
-     || vecGameBoard.at(pairCoordinates.first).at(pairCoordinates.second) == Playable_O)
+    if(vecGameBoard.at(pairCoordinates.first).at(pairCoordinates.second) != GAMEBOARDINITVALUE)
      {
          bRetVal = false;
      }

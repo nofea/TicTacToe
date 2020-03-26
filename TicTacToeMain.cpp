@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+#include <algorithm>
 #include "Commons.hpp"
 #include "GameBoard.hpp"
 #include "Logger.hpp"
@@ -11,10 +13,14 @@ using namespace std;
 
 int main()
 {   
-    string sPlayable("");
+    string sPlayable(""), sGameBoard("");
     Human H1;
     ComputerBlocker CB;
     Logger Log;
+    DrawGrid DG;
+    signed int iXCoord = 0, iYCoord = 0, iMoveCounter = 0;
+    bool bMarked = false;
+    pair<int, int> pairCoords;
 
     try
     {
@@ -25,21 +31,22 @@ int main()
         std::cerr << e.what() << endl;
     }
     
-    
-
     cout << "Welcome to a game of Tic Tac Toe" << endl;
+
     while (1)
     {
         cout << "Do you want to be X's or O's?" << endl;
         cin >> sPlayable;
 
-        if(sPlayable == "x" || sPlayable == "X")
+        transform(sPlayable.begin(), sPlayable.end(), sPlayable.begin(), ::toupper);
+
+        if(sPlayable == "X")
         {
             H1.SetPlayable(Playable_X);
             CB.SetPlayable(Playable_O);
             break;
         }
-        else if(sPlayable == "o" || sPlayable == "O")
+        else if(sPlayable == "O")
         {
             H1.SetPlayable(Playable_O);
             CB.SetPlayable(Playable_X);
@@ -48,21 +55,70 @@ int main()
         else
         {
             cout << "Bruh, pick X or O..." << endl;
-            Log.LogError("The Human is being daft!!!");
+            Log.LogError("The Human is being daft!!!", iMoveCounter);
         }
     }
     
-    Log.LogMessage("The Human chose: "+ to_string(H1.GetPlayable()));
-    Log.LogMessage("The Computer was given: "+ to_string(CB.GetPlayable()));
+    Log.LogMessage("The Human chose: "+ to_string(H1.GetPlayable()), iMoveCounter);
+    Log.LogMessage("The Computer was given: "+ to_string(CB.GetPlayable()), iMoveCounter);
 
     GameBoard GB(DEFAULTGAMEBOARDSIZE);
-    Log.LogMessage("Game Board Initialized with size: "+ to_string(DEFAULTGAMEBOARDSIZE));
+    Log.LogMessage("Game Board Initialized with size: "+ to_string(DEFAULTGAMEBOARDSIZE), iMoveCounter);
     
-    cout << "X goes first" << endl;
+    cout << "X goes first" << endl;  
 
-    while (!GB.IsEndOfGame())
+    if(CB.GetPlayable() == Playable_X)
     {
+        pairCoords = CB.ComputeMove(GB.ShowGameBoard());
+        GB.MarkBoard(pairCoords, CB.GetPlayable());
+        Log.LogMessage("The Computer played: "+ to_string(pairCoords.first)+ "," + to_string(pairCoords.second), iMoveCounter);
+
+    }
+    
+
+    // and so let the games begin...
+    while(!GB.IsEndOfGame())
+    {
+        bMarked = false;
+        iMoveCounter++;
         
+        sGameBoard = DG.DrawGameBoard(GB.ShowGameBoard());
+        cout << "The Game Board:" << endl;
+        cout << sGameBoard << endl;
+        Log.LogMessage(sGameBoard, iMoveCounter);   
+        
+        cout << "Key in x y Coordinates" << endl;
+
+        while(!bMarked)
+        {
+            cin >> iXCoord >> iYCoord;
+
+            if(iXCoord < DEFAULTGAMEBOARDSIZE && iYCoord < DEFAULTGAMEBOARDSIZE)
+            {
+                Log.LogMessage("The Human keyed in: "+ to_string(iXCoord) +" and "+ to_string(iYCoord), iMoveCounter);
+
+                if(!GB.MarkBoard(pair<signed int, signed int>(iXCoord, iYCoord), H1.GetPlayable()))
+                {
+                    Log.LogError("The Human keyed in: "+ to_string(iXCoord) +" and "+ to_string(iYCoord), iMoveCounter);
+                    cout << "This coordinate is already marked, pick a different position..." << endl; 
+                }
+                else
+                {
+                    bMarked = true;
+                }                   
+            }
+            else
+            {
+                Log.LogError("The Human keyed in: "+ to_string(iXCoord) +" and "+ to_string(iYCoord), iMoveCounter);
+                cout << "The x and y coordinates have to be between and including 0 and "+ to_string(DEFAULTGAMEBOARDSIZE - 1) << endl;
+                cout << "Try again..." << endl; 
+            }
+        }
+
+        pairCoords = CB.ComputeMove(GB.ShowGameBoard());
+        GB.MarkBoard(pairCoords, CB.GetPlayable());
+        Log.LogMessage("The Computer played: "+ to_string(pairCoords.first)+ "," + to_string(pairCoords.second), iMoveCounter);
+   
     }
     
     

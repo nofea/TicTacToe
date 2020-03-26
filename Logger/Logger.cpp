@@ -23,16 +23,26 @@ bool Logger::LogMessage(string sMessage)
 {
     bool RetVal = true;
 
-    log << "LOG_MESSAGE: " << sMessage << endl;
+    log << ": LOG_MESSAGE: " << sMessage << endl;
 
     return RetVal;
 }
 
-bool Logger::LogError(string sError)
+
+bool Logger::LogMessage(string sMessage, signed int& iTurnCount)
 {
     bool RetVal = true;
 
-    log << "LOG_ERROR: " << sError << endl;
+    log << "TURN: " << iTurnCount << ": LOG_MESSAGE: " << sMessage << endl;
+
+    return RetVal;
+}
+
+bool Logger::LogError(string sError, signed int& iTurnCount)
+{
+    bool RetVal = true;
+
+    log << "TURN: " << iTurnCount << ": LOG_ERROR: " << sError << endl;
 
     return RetVal;
 }

@@ -36,7 +36,7 @@ int ComputerBlocker::GetPlayable()
     return(iPlayable);
 }
 
-pair<int,int> ComputerBlocker::ComputeMove(vector<vector<int>>& vecGameBoard)
+pair<int,int> ComputerBlocker::ComputeMove(const vector<vector<int>>& vecGameBoard)
 {
     pair<int,int> pairCoordinates;
     int iCoordinate = -1;
@@ -91,7 +91,7 @@ bool ComputerBlocker::MakeVictoryConditionsList(int& iGameBoardSize)
     return true;
 }
 
-bool ComputerBlocker::UpdateEnemyPosition(vector<vector<int>>& vecGameBoard)
+bool ComputerBlocker::UpdateEnemyPosition(const vector<vector<int>>& vecGameBoard)
 {
     int iBoardSize = vecGameBoard.size();
     bool bRetVal = true;

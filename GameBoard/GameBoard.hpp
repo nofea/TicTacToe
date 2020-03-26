@@ -29,7 +29,7 @@ public:
     bool InitGameBoard();
     bool IsEndOfGame();
     std::list<std::pair<int,int>> GetVictorySet();
-    bool MarkBoard(std::pair<int,int>& pairCoordinates, int& iMark);
+    bool MarkBoard(const std::pair<signed int, signed int>& pairCoordinates, const signed int& iMark);
     std::vector<std::vector<int>> ShowGameBoard();
 };
 

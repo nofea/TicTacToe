@@ -23,12 +23,12 @@ public:
 
 private:
     bool MakeVictoryConditionsList(int& iGameBoardSize);
-    bool UpdateEnemyPosition(std::vector<std::vector<int>>& vecGameBoard);
+    bool UpdateEnemyPosition(const std::vector<std::vector<int>>& vecGameBoard);
 
 public:
     void SetPlayable(int iPlayerChoice);
     int GetPlayable();
-    std::pair<int,int> ComputeMove(std::vector<std::vector<int>>& vecGameBoard);
+    std::pair<int,int> ComputeMove(const std::vector<std::vector<int>>& vecGameBoard);
 };
 
 #endif
