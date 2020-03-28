@@ -3,12 +3,22 @@
 
 using namespace std;
 
-DrawGrid::DrawGrid(/* args */)
+DrawGrid::DrawGrid()
 {
 }
 
 DrawGrid::~DrawGrid()
 {
+}
+
+DrawGrid::DrawGrid(const DrawGrid& obj)
+{
+
+}
+
+DrawGrid& DrawGrid::operator=(const DrawGrid& obj)
+{
+    return *this;
 }
 
 string DrawGrid::DrawGameBoard(const vector<vector<int>>& vecGameBoard)

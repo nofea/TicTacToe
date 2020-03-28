@@ -85,7 +85,7 @@ int main()
         sGameBoard = DG.DrawGameBoard(GB.ShowGameBoard());
         cout << "The Game Board:" << endl;
         cout << sGameBoard << endl;
-        Log.LogMessage(sGameBoard, iMoveCounter);   
+        Log.LogMessage("\n"+sGameBoard, iMoveCounter);   
         
         cout << "Key in x y Coordinates" << endl;
 
@@ -116,12 +116,19 @@ int main()
         }
 
         pairCoords = CB.ComputeMove(GB.ShowGameBoard());
-        GB.MarkBoard(pairCoords, CB.GetPlayable());
-        Log.LogMessage("The Computer played: "+ to_string(pairCoords.first)+ "," + to_string(pairCoords.second), iMoveCounter);
-   
+
+        if(pairCoords != pair<int, int>(-1, -1))
+        {
+             GB.MarkBoard(pairCoords, CB.GetPlayable());
+            Log.LogMessage("The Computer played: "+ to_string(pairCoords.first)+ "," + to_string(pairCoords.second), iMoveCounter);
+        }
     }
     
-    
+    cout << "Game Over!" << endl;
+    sGameBoard = DG.DrawGameBoard(GB.ShowGameBoard());
+    cout << "The Game Board:" << endl;
+    cout << sGameBoard << endl;
+    Log.LogMessage("\n"+sGameBoard, iMoveCounter); 
     Log.CloseLoggerFile();
     return 0;
 }

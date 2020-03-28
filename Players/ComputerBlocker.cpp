@@ -1,4 +1,5 @@
 #include "ComputerBlocker.hpp"
+#include <algorithm>
 
 using namespace std;
 
@@ -14,11 +15,17 @@ ComputerBlocker::ComputerBlocker(int& iPlayerChoice)
 ComputerBlocker::ComputerBlocker(const ComputerBlocker& obj)
 {
     iPlayable = obj.iPlayable;
+    vecVictoryConditions = obj.vecVictoryConditions;
+    listEnemyPositions = obj.listEnemyPositions;
+    listMyPositions = obj.listMyPositions;
 }
 
 ComputerBlocker& ComputerBlocker::operator=(const ComputerBlocker& obj)
 {
     iPlayable = obj.iPlayable;
+    vecVictoryConditions = obj.vecVictoryConditions;
+    listEnemyPositions = obj.listEnemyPositions;
+    listMyPositions = obj.listMyPositions;
     return *this;
 }
 
@@ -38,15 +45,18 @@ int ComputerBlocker::GetPlayable()
 
 pair<int,int> ComputerBlocker::ComputeMove(const vector<vector<int>>& vecGameBoard)
 {
-    pair<int,int> pairCoordinates;
-    int iCoordinate = -1;
-    
+    pair<int,int> pairCoordinates(-1,-1);
+    int iCoordinate = -1, iVictoryCondition = -1;
+    list<pair<int,int>>::iterator ft;
+    vector<int>::iterator itMax;
     int iBoardSize = vecGameBoard.size();
+    bool bFound = false;
 
     if(vecVictoryConditions.empty())
     {
         MakeVictoryConditionsList(iBoardSize);
     }
+    vector<int> vecPredictionCounter(vecVictoryConditions.size(), 0);
 
     if(!UpdateEnemyPosition(vecGameBoard))
     {
@@ -57,10 +67,55 @@ pair<int,int> ComputerBlocker::ComputeMove(const vector<vector<int>>& vecGameBoa
     }
     else
     {
+        for(auto it = listEnemyPositions.begin(); it != listEnemyPositions.end(); ++it)
+        {
+            for(auto ivec = vecVictoryConditions.begin(); ivec != vecVictoryConditions.end(); ++ivec)
+            {
+                
+                ft = find(ivec->begin(), ivec->end(), *it);
+
+                if(ft != ivec->end())
+                {
+                    vecPredictionCounter.at(ivec - vecVictoryConditions.begin())++;
+                }      
+            }
+        }
+
+        while(!bFound)
+        {
+            if(iVictoryCondition != -1)
+            {
+                vecPredictionCounter.erase(itMax);
+            }
+            
+            itMax = max_element(vecPredictionCounter.begin(), vecPredictionCounter.end());  
+            iVictoryCondition = itMax - vecPredictionCounter.begin();
+
+            if(vecPredictionCounter.at(iVictoryCondition) == iBoardSize)
+            {
+                // concede
+                break;
+            }
+
+            for(auto itList = vecVictoryConditions.at(iVictoryCondition).begin(); itList != vecVictoryConditions.at(iVictoryCondition).end(); ++itList)
+            {
+                ft = find(listEnemyPositions.begin(), listEnemyPositions.end(), *itList);
+
+                if(ft == listEnemyPositions.end())
+                {
+                    if(!AlreadyMadeThisMove(*itList))
+                    {
+                        pairCoordinates = *itList;
+                        bFound = true;
+                        break;
+                    }
+                }
+            }
+        }
         
     }
     
-
+    RememberMyPosition(pairCoordinates);
     return pairCoordinates;
 }
 
@@ -120,4 +175,30 @@ bool ComputerBlocker::UpdateEnemyPosition(const vector<vector<int>>& vecGameBoar
     }
 
     return bRetVal;
+}
+
+bool ComputerBlocker::RememberMyPosition(const pair<int,int>& pairCoords)
+{
+    bool retValue = true;
+
+    if(!AlreadyMadeThisMove(pairCoords))
+    {
+        listMyPositions.push_back(pairCoords);
+    }
+
+    return retValue;
+}
+
+bool ComputerBlocker::AlreadyMadeThisMove(const pair<int,int>& pairCoords)
+{
+    bool retValue = true;
+
+    auto it = find(listMyPositions.begin(), listMyPositions.end(), pairCoords);
+
+    if(it == listMyPositions.end())
+    {
+        retValue = false;
+    }
+
+    return retValue;
 }
