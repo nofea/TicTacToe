@@ -26,9 +26,9 @@ int main()
     {
         Log.OpenLoggerFile(LOGGERPATHNAME);
     }
-    catch(const std::exception& e)
+    catch(const exception& e)
     {
-        std::cerr << e.what() << endl;
+        cerr << e.what() << endl;
     }
     
     cout << "Welcome to a game of Tic Tac Toe" << endl;

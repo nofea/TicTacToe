@@ -111,8 +111,7 @@ pair<int,int> ComputerBlocker::ComputeMove(const vector<vector<int>>& vecGameBoa
                     }
                 }
             }
-        }
-        
+        }     
     }
     
     RememberMyPosition(pairCoordinates);
