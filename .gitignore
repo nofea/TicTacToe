@@ -1,0 +1,3 @@
+# ignore the following for git repos
+
+.vscode/
