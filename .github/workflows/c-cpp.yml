@@ -8,11 +8,21 @@ on:
 
 jobs:
   build:
-
+    
+    name: linuxYolo
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
     - name: make
-      run: make all
+      run: make -f linux.mk
+    
+    
+    name: windowsYolo
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: make
+      run: mingw32-make -f windows.mk
 
