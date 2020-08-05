@@ -7,22 +7,23 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-    
-    name: linuxYolo
-    runs-on: ubuntu-latest
+  job_1:
+    build:
+      name: linuxYolo
+      runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: make
-      run: make -f linux.mk
+      steps:
+      - uses: actions/checkout@v2
+      - name: make
+        run: make -f linux.mk
     
-    
-    name: windowsYolo
-    runs-on: windows-latest
+  job_2:
+    build:  
+      name: windowsYolo
+      runs-on: windows-latest
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: make
-      run: mingw32-make -f windows.mk
+      steps:
+      - uses: actions/checkout@v2
+      - name: make
+        run: mingw32-make -f windows.mk
 
