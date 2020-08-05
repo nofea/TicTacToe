@@ -124,11 +124,18 @@ int main()
         }
     }
     
+    cout << endl;
+    cout << endl;
     cout << "Game Over!" << endl;
     sGameBoard = DG.DrawGameBoard(GB.ShowGameBoard());
     cout << "The Game Board:" << endl;
     cout << sGameBoard << endl;
     Log.LogMessage("\n"+sGameBoard, iMoveCounter); 
+
+    // wait for user input
+    cin.get(); // safety workaround
+    cin.get(); 
+
     Log.CloseLoggerFile();
     return 0;
 }
