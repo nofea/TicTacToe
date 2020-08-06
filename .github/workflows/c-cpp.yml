@@ -15,8 +15,10 @@ jobs:
     - name: install_dependency
       run: apt install mingw-w64
 
-    - name: make
+    - name: check_out
       uses: actions/checkout@v2
+    
+    - name: make
       run: make all
     
       
