@@ -9,7 +9,6 @@ on:
 jobs:
   job_1:
     build:
-      name: linuxYolo
       runs-on: ubuntu-latest
 
       steps:
@@ -19,7 +18,6 @@ jobs:
     
   job_2:
     build:  
-      name: windowsYolo
       runs-on: windows-latest
 
       steps:
