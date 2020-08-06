@@ -21,11 +21,11 @@ jobs:
   job_2:
     build:
       name: Windows_build  
-      runs-on: windows-latest
+      runs-on: ubuntu-latest
 
       steps:
       - id: step1
       - uses: actions/checkout@v2
       - name: make
-          run: mingw32-make windows
+          run: make windows
 
