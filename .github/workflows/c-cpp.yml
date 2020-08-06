@@ -16,7 +16,7 @@ jobs:
       - id: step1
       - uses: actions/checkout@v2
       - name: make
-          run: make -f linux.mk
+          run: make linux
     
   job_2:
     build:
@@ -27,5 +27,5 @@ jobs:
       - id: step1
       - uses: actions/checkout@v2
       - name: make
-          run: mingw32-make -f windows.mk
+          run: mingw32-make windows
 
