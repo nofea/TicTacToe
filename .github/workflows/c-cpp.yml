@@ -33,10 +33,10 @@ jobs:
         run: mkdir Release
 
       - name: Move Linux Executables
-        run: mv build_linux/tictactoe.out Release/tictactoe.out
+        run: mv /build_linux/tictactoe.out /Release/tictactoe.out
 
       - name: Move Windows Executables
-        run: mv build_windows/tictactoe.exe Release/tictactoe.exe
+        run: mv /build_windows/tictactoe.exe /Release/tictactoe.exe
 
   release:
     if: github.event_name == 'push'
