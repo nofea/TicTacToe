@@ -29,7 +29,7 @@ jobs:
     needs: [ build ]
     strategy:
       matrix: 
-        executable: [.out, .exe]
+        executable: [out, exe]
     runs-on: ubuntu-latest
 
     steps:
