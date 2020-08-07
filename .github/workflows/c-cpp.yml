@@ -11,13 +11,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: install_dependency
+
+    - name: Install dependency 
+      id: install_dependency
       run: sudo apt install mingw-w64
 
-    - name: check_out
+    - name: Check Out
+      id: check_out
       uses: actions/checkout@v2
     
-    - name: make
+    - name: Make
+      id: make
       run: make all
     
-      
