@@ -25,11 +25,11 @@ jobs:
       run: make all
 
   release:
+    if: github.event_name == push
     needs: [ build ]
     strategy:
       matrix: 
-        asset_file_path: [./build_linux/tictactoe.out, ./build_windows/tictactoe.exe]
-        asset_file_name: [tictactoe.out, tictactoe.exe]
+        executable: [.out, .exe]
     runs-on: ubuntu-latest
 
     steps:
@@ -55,7 +55,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ${{matrix.asset_file_path}}
-        asset_name: ${{matrix.asset_file_name}}
+        asset_path: ./build_linux/tictactoe.${{matrix.executable}}
+        asset_name: tictactoe.${{matrix.executable}}
         asset_content_type: application
     
