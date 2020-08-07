@@ -24,9 +24,23 @@ jobs:
       id: make
       run: make all
 
+  consolidate:
+    needs: [ build ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create Release Folder
+        run: mkdir Release
+
+      - name: Move Linux Executables
+        run: mv build_linux/tictactoe.out Release/tictactoe.out
+
+      - name: Move Windows Executables
+        run: mv build_windows/tictactoe.exe Release/tictactoe.exe
+
   release:
     if: github.event_name == 'push'
-    needs: [ build ]
+    needs: [ consolidate ]
     strategy:
       matrix: 
         executable: [out, exe]
@@ -41,10 +55,6 @@ jobs:
       with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
-        body: |
-          Changes in this Release
-          - First Change
-          - Second Change
         draft: true
         prerelease: false
 
@@ -55,7 +65,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./build_linux/tictactoe.${{matrix.executable}}
+        asset_path: Release/tictactoe.${{matrix.executable}}
         asset_name: tictactoe.${{matrix.executable}}
         asset_content_type: application
     
