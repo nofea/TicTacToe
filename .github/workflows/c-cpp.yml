@@ -6,8 +6,14 @@ on:
   pull_request:
     branches: [ master ]
 
+
+
 jobs:
   build:
+    
+    strategy:
+      matrix: 
+        executable: [out, exe]
     runs-on: ubuntu-latest
 
     steps:
@@ -24,29 +30,16 @@ jobs:
       id: make
       run: make all
 
-  consolidate:
-    needs: [ build ]
-    runs-on: ubuntu-latest
+    - name: Create Release Folder
+      if: github.event_name == 'push'
+      run: mkdir Release
 
-    steps:
-      - name: Create Release Folder
-        run: mkdir Release
+    - name: Move Linux Executables
+      run: mv build_linux/tictactoe.out Release/tictactoe.out
 
-      - name: Move Linux Executables
-        run: mv /build_linux/tictactoe.out /Release/tictactoe.out
+    - name: Move Windows Executables
+      run: mv build_windows/tictactoe.exe Release/tictactoe.exe
 
-      - name: Move Windows Executables
-        run: mv /build_windows/tictactoe.exe /Release/tictactoe.exe
-
-  release:
-    if: github.event_name == 'push'
-    needs: [ consolidate ]
-    strategy:
-      matrix: 
-        executable: [out, exe]
-    runs-on: ubuntu-latest
-
-    steps:
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
