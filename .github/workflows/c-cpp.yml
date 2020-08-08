@@ -27,17 +27,16 @@ jobs:
       id: make
       run: make all
 
-    - name: Create Release Folder
+    - name: Consolidate
       if: github.event_name == 'push'
-      run: mkdir Release
-
-    - name: Move Linux Executables
-      run: mv build_linux/tictactoe.out Release/tictactoe.out
-
-    - name: Move Windows Executables
-      run: mv build_windows/tictactoe.exe Release/tictactoe.exe
+      run: | 
+      
+        mkdir Release
+        mv build_linux/tictactoe.out Release/tictactoe.out
+        mv build_windows/tictactoe.exe Release/tictactoe.exe
 
     - name: Create Release
+      if: github.event_name == 'push'
       id: create_release
       uses: actions/create-release@v1
       env:
@@ -49,6 +48,7 @@ jobs:
         prerelease: false
 
     - name: Upload Asset Linux
+      if: github.event_name == 'push'
       id: upload-release-asset-linux
       uses: actions/upload-release-asset@v1
       env:
@@ -60,6 +60,7 @@ jobs:
         asset_content_type: application
     
     - name: Upload Asset Windows
+      if: github.event_name == 'push'
       id: upload-release-asset-windows
       uses: actions/upload-release-asset@v1
       env:
