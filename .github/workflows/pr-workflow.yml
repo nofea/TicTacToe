@@ -1,0 +1,26 @@
+name: PR Workflow
+
+on:
+  pull_request:
+    branches: [ master ]
+
+
+
+jobs:
+  build:
+  
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Install dependency 
+      id: install_dependency
+      run: sudo apt install mingw-w64
+
+    - name: Check Out
+      id: check_out
+      uses: actions/checkout@v2
+    
+    - name: Make
+      id: make
+      run: make all
