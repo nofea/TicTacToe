@@ -10,10 +10,7 @@ on:
 
 jobs:
   build:
-    
-    strategy:
-      matrix: 
-        executable: [out, exe]
+  
     runs-on: ubuntu-latest
 
     steps:
@@ -51,14 +48,24 @@ jobs:
         draft: true
         prerelease: false
 
-    - name: Upload Asset
-      id: upload-release-asset 
+    - name: Upload Asset Linux
+      id: upload-release-asset-linux
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: Release/tictactoe.${{matrix.executable}}
-        asset_name: tictactoe.${{matrix.executable}}
+        upload_url: ${{ steps.create_release.outputs.upload_url }} 
+        asset_path: Release/tictactoe.out
+        asset_name: tictactoe.out
         asset_content_type: application
     
+    - name: Upload Asset Windows
+      id: upload-release-asset-windows
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: Release/tictactoe.exe
+        asset_name: tictactoe.exe
+        asset_content_type: application
