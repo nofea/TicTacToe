@@ -38,24 +38,32 @@ int main()
         cout << "Do you want to be X's or O's?" << endl;
         cin >> sPlayable;
 
-        transform(sPlayable.begin(), sPlayable.end(), sPlayable.begin(), ::toupper);
+        try
+        {
+            transform(sPlayable.begin(), sPlayable.end(), sPlayable.begin(), ::toupper);
 
-        if(sPlayable == "X")
-        {
-            H1.SetPlayable(Playable_X);
-            CB.SetPlayable(Playable_O);
-            break;
+            if(sPlayable == "X")
+            {
+                H1.SetPlayable(Playable_X);
+                CB.SetPlayable(Playable_O);
+                break;
+            }
+            else if(sPlayable == "O")
+            {
+                H1.SetPlayable(Playable_O);
+                CB.SetPlayable(Playable_X);
+                break;
+            }
+            else
+            {
+                cout << "Bruh, pick X or O..." << endl;
+                Log.LogError("The Human is being daft!!!", iMoveCounter);
+            }
         }
-        else if(sPlayable == "O")
+        catch(const std::exception& e)
         {
-            H1.SetPlayable(Playable_O);
-            CB.SetPlayable(Playable_X);
-            break;
-        }
-        else
-        {
-            cout << "Bruh, pick X or O..." << endl;
-            Log.LogError("The Human is being daft!!!", iMoveCounter);
+            cerr << e.what() << endl;
+            Log.LogError(e.what(), iMoveCounter);
         }
     }
     
@@ -69,10 +77,17 @@ int main()
 
     if(CB.GetPlayable() == Playable_X)
     {
-        pairCoords = CB.ComputeMove(GB.ShowGameBoard());
-        GB.MarkBoard(pairCoords, CB.GetPlayable());
-        Log.LogMessage("The Computer played: "+ to_string(pairCoords.first)+ "," + to_string(pairCoords.second), iMoveCounter);
-
+        try
+        {
+            pairCoords = CB.ComputeMove(GB.ShowGameBoard());
+            GB.MarkBoard(pairCoords, CB.GetPlayable());
+            Log.LogMessage("The Computer played: "+ to_string(pairCoords.first)+ "," + to_string(pairCoords.second), iMoveCounter);
+        }
+        catch(const std::exception& e)
+        {
+            cerr << e.what() << endl;
+            Log.LogError(e.what(), iMoveCounter);
+        }
     }
     
 
@@ -97,15 +112,24 @@ int main()
             {
                 Log.LogMessage("The Human keyed in: "+ to_string(iXCoord) +" and "+ to_string(iYCoord), iMoveCounter);
 
-                if(!GB.MarkBoard(pair<signed int, signed int>(iXCoord, iYCoord), H1.GetPlayable()))
+                try
                 {
-                    Log.LogError("The Human keyed in: "+ to_string(iXCoord) +" and "+ to_string(iYCoord), iMoveCounter);
-                    cout << "This coordinate is already marked, pick a different position..." << endl; 
+                    if(!GB.MarkBoard(pair<signed int, signed int>(iXCoord, iYCoord), H1.GetPlayable()))
+                    {
+                        Log.LogError("The Human keyed in: "+ to_string(iXCoord) +" and "+ to_string(iYCoord), iMoveCounter);
+                        cout << "This coordinate is already marked, pick a different position..." << endl; 
+                    }
+                    else
+                    {
+                        bMarked = true;
+                    }  
                 }
-                else
+                catch(const std::exception& e)
                 {
-                    bMarked = true;
-                }                   
+                    cerr << e.what() << endl;
+                    Log.LogError(e.what(), iMoveCounter);
+                }
+                                 
             }
             else
             {
@@ -115,12 +139,20 @@ int main()
             }
         }
 
-        pairCoords = CB.ComputeMove(GB.ShowGameBoard());
-
-        if(pairCoords != pair<int, int>(-1, -1))
+        try
         {
-             GB.MarkBoard(pairCoords, CB.GetPlayable());
-            Log.LogMessage("The Computer played: "+ to_string(pairCoords.first)+ "," + to_string(pairCoords.second), iMoveCounter);
+            pairCoords = CB.ComputeMove(GB.ShowGameBoard());
+
+            if(pairCoords != pair<int, int>(-1, -1))
+            {
+                GB.MarkBoard(pairCoords, CB.GetPlayable());
+                Log.LogMessage("The Computer played: "+ to_string(pairCoords.first)+ "," + to_string(pairCoords.second), iMoveCounter);
+            }
+        }
+        catch(const std::exception& e)
+        {
+            cerr << e.what() << endl;
+            Log.LogError(e.what(), iMoveCounter);
         }
     }
     
