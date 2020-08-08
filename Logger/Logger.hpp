@@ -4,22 +4,21 @@
 #include <iostream>
 #include <fstream>
 
-using namespace std;
-
 class Logger
 {
 private:
-    ofstream log;
+    std::ofstream log;
 public:
     Logger();
     ~Logger();
 
 public:
-    bool OpenLoggerFile(string sFilePathName);
-    bool LogMessage(string sMessage);
-    bool LogMessage(string sMessage, signed int& iTurnCount);
-    bool LogError(string sError, signed int& iTurnCount);
+    bool OpenLoggerFile(std::string sFilePathName);
+    bool LogMessage(std::string sMessage);
+    bool LogMessage(std::string sMessage, signed int& iTurnCount);
+    bool LogError(std::string sError, signed int& iTurnCount);
     bool CloseLoggerFile();
+    const std::string GetCurrentDateTime();
 };
 
 #endif
