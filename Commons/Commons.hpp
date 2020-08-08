@@ -3,7 +3,7 @@
 
 
 #define DEFAULTGAMEBOARDSIZE 3
-#define LOGGERPATHNAME "log.txt"
+#define LOGGERPATHNAME "log"
 #define GAMEBOARDINITVALUE -1
 
 enum Playable
