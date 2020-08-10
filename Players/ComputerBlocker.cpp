@@ -61,7 +61,7 @@ pair<int,int> ComputerBlocker::ComputeMove(const vector<vector<int>>& vecGameBoa
     if(!UpdateEnemyPosition(vecGameBoard))
     {
         // The first move
-        iCoordinate = rand() % iBoardSize + 1;
+        iCoordinate = rand() % iBoardSize;
         pairCoordinates.first = iCoordinate;
         pairCoordinates.second = iCoordinate;
     }

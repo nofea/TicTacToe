@@ -222,14 +222,21 @@ bool GameBoard::MarkBoard(const pair<signed int, signed int>& pairCoordinates, c
 { 
     bool bRetVal = true;
 
-    if(vecGameBoard.at(pairCoordinates.first).at(pairCoordinates.second) != GAMEBOARDINITVALUE)
-     {
-         bRetVal = false;
-     }
-     else
-     {
-         vecGameBoard.at(pairCoordinates.first).at(pairCoordinates.second) = iMark;
-     }
+    if(pairCoordinates.first < ZERO || pairCoordinates.second > (iBoardSize - 1))
+    {
+        bRetVal = false;
+    }
+    else
+    {
+        if(vecGameBoard.at(pairCoordinates.first).at(pairCoordinates.second) != GAMEBOARDINITVALUE)
+        {
+            bRetVal = false;
+        }
+        else
+        {
+            vecGameBoard.at(pairCoordinates.first).at(pairCoordinates.second) = iMark;
+        }
+    }
      
     return bRetVal;
 }
