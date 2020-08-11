@@ -22,6 +22,7 @@ int main()
     bool bMarked = false;
     pair<int, int> pairCoords = pair<int,int>(-1,-1);
     signed int iRetry = 0;
+    int iWinningPlayable = -1;
 
     try
     {
@@ -175,8 +176,28 @@ int main()
     
     cout << endl;
     cout << endl;
-    cout << "Game Over!" << endl;
-    Log.LogMessage("Game Over!");
+    cout << "Game Over!!!" << endl;
+    Log.LogMessage("Game Over!!!");
+
+    iWinningPlayable = GB.GetWinningPlayable();
+
+    if(iWinningPlayable == H1.GetPlayable())
+    {
+        cout << "You Won!!!" << endl;
+        Log.LogMessage("You Won!!!");
+    }
+    else if(iWinningPlayable == CB.GetPlayable())
+    {
+        cout << "The Computer Won!!!" << endl;
+        Log.LogMessage("The Computer Won!!!");
+    }
+    else
+    {
+        cout << "It was a Stalemate!!!" << endl;
+        Log.LogMessage("It was a Stalemate!!!");
+    }
+    
+
     sGameBoard = DG.DrawGameBoard(GB.ShowGameBoard());
     cout << "The Game Board:" << endl;
     cout << sGameBoard << endl;
