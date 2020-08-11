@@ -20,7 +20,9 @@ int main()
     DrawGrid DG;
     signed int iXCoord = 0, iYCoord = 0, iMoveCounter = 0;
     bool bMarked = false;
-    pair<int, int> pairCoords;
+    pair<int, int> pairCoords = pair<int,int>(-1,-1);
+    signed int iRetry = 0;
+    int iWinningPlayable = -1;
 
     try
     {
@@ -33,7 +35,7 @@ int main()
     
     cout << "Welcome to a game of Tic Tac Toe" << endl;
 
-    while (1)
+    while (1) //change this!!!
     {
         cout << "Do you want to be X's or O's?" << endl;
         cin >> sPlayable;
@@ -72,16 +74,35 @@ int main()
 
     GameBoard GB(DEFAULTGAMEBOARDSIZE);
     Log.LogMessage("Game Board Initialized with size: "+ to_string(DEFAULTGAMEBOARDSIZE), iMoveCounter);
+
+    sGameBoard = DG.DrawGameBoard(GB.ShowGameBoard());
+    cout << "The Game Board:" << endl;
+    cout << sGameBoard << endl;
+    Log.LogMessage("\n"+sGameBoard, iMoveCounter);
     
-    cout << "X goes first" << endl;  
+    cout << "X goes first" << endl;
+    iMoveCounter++;  
 
     if(CB.GetPlayable() == Playable_X)
     {
         try
         {
-            pairCoords = CB.ComputeMove(GB.ShowGameBoard());
-            GB.MarkBoard(pairCoords, CB.GetPlayable());
-            Log.LogMessage("The Computer played: "+ to_string(pairCoords.first)+ "," + to_string(pairCoords.second), iMoveCounter);
+            while(++iRetry < NUMBEROFRETRIES)
+            {
+                pairCoords = CB.ComputeMove(GB.ShowGameBoard());
+                if(GB.MarkBoard(pairCoords, CB.GetPlayable()))
+                {
+                    CB.RememberMyPosition(pairCoords);
+                    break;
+                }
+            }
+            iRetry = 0;
+            Log.LogMessage("The Computer played: "+ to_string(pairCoords.first)+ ", " + to_string(pairCoords.second), iMoveCounter);
+              
+            sGameBoard = DG.DrawGameBoard(GB.ShowGameBoard());
+            cout << "The Game Board:" << endl;
+            cout << sGameBoard << endl;
+            Log.LogMessage("\n"+sGameBoard, iMoveCounter);
         }
         catch(const std::exception& e)
         {
@@ -95,12 +116,7 @@ int main()
     while(!GB.IsEndOfGame())
     {
         bMarked = false;
-        iMoveCounter++;
-        
-        sGameBoard = DG.DrawGameBoard(GB.ShowGameBoard());
-        cout << "The Game Board:" << endl;
-        cout << sGameBoard << endl;
-        Log.LogMessage("\n"+sGameBoard, iMoveCounter);   
+        pairCoords = pair<int,int>(-1,-1);   
         
         cout << "Key in x y Coordinates" << endl;
 
@@ -110,13 +126,13 @@ int main()
 
             if(iXCoord < DEFAULTGAMEBOARDSIZE && iYCoord < DEFAULTGAMEBOARDSIZE)
             {
-                Log.LogMessage("The Human keyed in: "+ to_string(iXCoord) +" and "+ to_string(iYCoord), iMoveCounter);
+                Log.LogMessage("The Human keyed in: "+ to_string(iXCoord) +", "+ to_string(iYCoord), iMoveCounter);
 
                 try
                 {
                     if(!GB.MarkBoard(pair<signed int, signed int>(iXCoord, iYCoord), H1.GetPlayable()))
                     {
-                        Log.LogError("The Human keyed in: "+ to_string(iXCoord) +" and "+ to_string(iYCoord), iMoveCounter);
+                        Log.LogError("The Human keyed in: "+ to_string(iXCoord) +", "+ to_string(iYCoord), iMoveCounter);
                         cout << "This coordinate is already marked, pick a different position..." << endl; 
                     }
                     else
@@ -133,7 +149,7 @@ int main()
             }
             else
             {
-                Log.LogError("The Human keyed in: "+ to_string(iXCoord) +" and "+ to_string(iYCoord), iMoveCounter);
+                Log.LogError("The Human keyed in: "+ to_string(iXCoord) +", "+ to_string(iYCoord), iMoveCounter);
                 cout << "The x and y coordinates have to be between and including 0 and "+ to_string(DEFAULTGAMEBOARDSIZE - 1) << endl;
                 cout << "Try again..." << endl; 
             }
@@ -141,24 +157,57 @@ int main()
 
         try
         {
-            pairCoords = CB.ComputeMove(GB.ShowGameBoard());
-
-            if(pairCoords != pair<int, int>(-1, -1))
+            while(++iRetry < NUMBEROFRETRIES)
             {
-                GB.MarkBoard(pairCoords, CB.GetPlayable());
-                Log.LogMessage("The Computer played: "+ to_string(pairCoords.first)+ "," + to_string(pairCoords.second), iMoveCounter);
+                pairCoords = CB.ComputeMove(GB.ShowGameBoard());
+                if(GB.MarkBoard(pairCoords, CB.GetPlayable()))
+                {
+                    CB.RememberMyPosition(pairCoords);
+                    break;
+                }
             }
+            iRetry = 0;
+            
+            Log.LogMessage("The Computer played: "+ to_string(pairCoords.first)+ ", " + to_string(pairCoords.second), iMoveCounter);    
         }
         catch(const std::exception& e)
         {
             cerr << e.what() << endl;
             Log.LogError(e.what(), iMoveCounter);
         }
+
+        sGameBoard = DG.DrawGameBoard(GB.ShowGameBoard());
+        cout << "The Game Board:" << endl;
+        cout << sGameBoard << endl;
+        Log.LogMessage("\n"+sGameBoard, iMoveCounter);
+
+        iMoveCounter++;
     }
     
     cout << endl;
     cout << endl;
-    cout << "Game Over!" << endl;
+    cout << "Game Over!!!" << endl;
+    Log.LogMessage("Game Over!!!");
+
+    iWinningPlayable = GB.GetWinningPlayable();
+
+    if(iWinningPlayable == H1.GetPlayable())
+    {
+        cout << "You Won!!!" << endl;
+        Log.LogMessage("You Won!!!");
+    }
+    else if(iWinningPlayable == CB.GetPlayable())
+    {
+        cout << "The Computer Won!!!" << endl;
+        Log.LogMessage("The Computer Won!!!");
+    }
+    else
+    {
+        cout << "It was a Stalemate!!!" << endl;
+        Log.LogMessage("It was a Stalemate!!!");
+    }
+    
+
     sGameBoard = DG.DrawGameBoard(GB.ShowGameBoard());
     cout << "The Game Board:" << endl;
     cout << sGameBoard << endl;

@@ -82,21 +82,25 @@ bool GameBoard::IsEndOfGame()
         if(listRowX.size() == iBoardSize)
         {
             SaveVictorySet(MatrixProperties_Row, i);
+            iWinningPlayable = Playable_X;
             return true;
         }
         else if(listRowO.size() == iBoardSize)
         {
             SaveVictorySet(MatrixProperties_Row, i);
+            iWinningPlayable = Playable_O;
             return true;
         }
         else if(listColX.size() == iBoardSize)
         {
             SaveVictorySet(MatrixProperties_Column, i);
+            iWinningPlayable = Playable_X;
             return true;
         }
         else if(listColO.size() == iBoardSize)
         {
             SaveVictorySet(MatrixProperties_Column, i);
+            iWinningPlayable = Playable_O;
             return true;
         }
         else
@@ -129,21 +133,25 @@ bool GameBoard::IsEndOfGame()
     if(listPDiaX.size() == iBoardSize)
     {
         SaveVictorySet(MatrixProperties_PrimaryDiagonal, iTemp);
+        iWinningPlayable = Playable_X;
         retVal = true;
     }
     else if(listPDiaO.size() == iBoardSize)
     {
         SaveVictorySet(MatrixProperties_PrimaryDiagonal, iTemp);
+        iWinningPlayable = Playable_O;
         retVal = true;
     }
     else if(listSDiaX.size() == iBoardSize)
     {
         SaveVictorySet(MatrixProperties_SecondaryDiagonal, iTemp);
+        iWinningPlayable = Playable_X;
         retVal = true;
     }
     else if(listSDiaO.size() == iBoardSize)
     {
         SaveVictorySet(MatrixProperties_SecondaryDiagonal, iTemp);
+        iWinningPlayable = Playable_O;
         retVal = true;
     }
     else
@@ -222,14 +230,21 @@ bool GameBoard::MarkBoard(const pair<signed int, signed int>& pairCoordinates, c
 { 
     bool bRetVal = true;
 
-    if(vecGameBoard.at(pairCoordinates.first).at(pairCoordinates.second) != GAMEBOARDINITVALUE)
-     {
-         bRetVal = false;
-     }
-     else
-     {
-         vecGameBoard.at(pairCoordinates.first).at(pairCoordinates.second) = iMark;
-     }
+    if(pairCoordinates.first < ZERO || pairCoordinates.second > (iBoardSize - 1))
+    {
+        bRetVal = false;
+    }
+    else
+    {
+        if(vecGameBoard.at(pairCoordinates.first).at(pairCoordinates.second) != GAMEBOARDINITVALUE)
+        {
+            bRetVal = false;
+        }
+        else
+        {
+            vecGameBoard.at(pairCoordinates.first).at(pairCoordinates.second) = iMark;
+        }
+    }
      
     return bRetVal;
 }
@@ -237,4 +252,9 @@ bool GameBoard::MarkBoard(const pair<signed int, signed int>& pairCoordinates, c
 vector<std::vector<int>> GameBoard::ShowGameBoard()
 {
     return vecGameBoard;
+}
+
+int GameBoard::GetWinningPlayable()
+{
+    return iWinningPlayable;
 }
