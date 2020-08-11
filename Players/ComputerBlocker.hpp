@@ -25,13 +25,13 @@ public:
 private:
     bool MakeVictoryConditionsList(int& iGameBoardSize);
     bool UpdateEnemyPosition(const std::vector<std::vector<int>>& vecGameBoard);
-    bool RememberMyPosition(const std::pair<int,int>& pairCoords);
     bool AlreadyMadeThisMove(const std::pair<int,int>& pairCoords);
 
 public:
     void SetPlayable(int iPlayerChoice);
     int GetPlayable();
     std::pair<int,int> ComputeMove(const std::vector<std::vector<int>>& vecGameBoard);
+    bool RememberMyPosition(const std::pair<int,int>& pairCoords); // Ideally this should be a private method, desperate times...
 };
 
 #endif

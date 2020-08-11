@@ -6,6 +6,7 @@
 #define LOGGERPATHNAME "log"
 #define GAMEBOARDINITVALUE -1
 #define ZERO 0
+#define NUMBEROFRETRIES 3
 
 enum Playable
 {

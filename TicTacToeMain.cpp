@@ -87,9 +87,14 @@ int main()
     {
         try
         {
-            while(!GB.MarkBoard(pairCoords, CB.GetPlayable()) && (++iRetry < 3))
+            while(++iRetry < NUMBEROFRETRIES)
             {
                 pairCoords = CB.ComputeMove(GB.ShowGameBoard());
+                if(GB.MarkBoard(pairCoords, CB.GetPlayable()))
+                {
+                    CB.RememberMyPosition(pairCoords);
+                    break;
+                }
             }
             iRetry = 0;
             Log.LogMessage("The Computer played: "+ to_string(pairCoords.first)+ ", " + to_string(pairCoords.second), iMoveCounter);
@@ -152,9 +157,14 @@ int main()
 
         try
         {
-            while(!GB.MarkBoard(pairCoords, CB.GetPlayable()) && (++iRetry < 3))
+            while(++iRetry < NUMBEROFRETRIES)
             {
                 pairCoords = CB.ComputeMove(GB.ShowGameBoard());
+                if(GB.MarkBoard(pairCoords, CB.GetPlayable()))
+                {
+                    CB.RememberMyPosition(pairCoords);
+                    break;
+                }
             }
             iRetry = 0;
             
