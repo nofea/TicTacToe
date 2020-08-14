@@ -18,7 +18,7 @@ public:
     bool LogMessage(std::string sMessage, signed int& iTurnCount);
     bool LogError(std::string sError, signed int& iTurnCount);
     bool CloseLoggerFile();
-    const std::string GetCurrentDateTime();
+    std::string GetCurrentDateTime();
 };
 
 #endif
