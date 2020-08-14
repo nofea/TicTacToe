@@ -26,7 +26,12 @@ int main()
 
     try
     {
-        Log.OpenLoggerFile(LOGGERPATHNAME);
+        if(!Log.OpenLoggerFile(LOGGERPATHNAME))
+        {
+            cout << "Error! Failed to Initialize Logger!" << endl;
+            cout << "Terminating..." << endl;
+            return 0;
+        }
     }
     catch(const exception& e)
     {

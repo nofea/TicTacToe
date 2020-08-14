@@ -15,10 +15,18 @@ bool Logger::OpenLoggerFile(string sFilePathFile)
 {
     bool RetVal = true;
 
-    sFilePathFile += "_" + GetCurrentDateTime()+".txt";
+    sFilePathFile += "_" + GetCurrentDateTime() + ".txt";
     
     log.open(sFilePathFile);
-    LogMessage("Initializing Logger");
+
+    if(log.is_open())
+    {
+        LogMessage("Initializing Logger");
+    }
+    else
+    {
+        RetVal = false;
+    }
     
     return RetVal;
 }
@@ -54,15 +62,16 @@ bool Logger::LogError(string sError, signed int& iTurnCount)
 bool Logger::CloseLoggerFile()
 {
     log.close();
+    return (!log.is_open());
 }
 
-const string Logger::GetCurrentDateTime() 
+string Logger::GetCurrentDateTime() 
 {
     time_t     now = time(0);
     struct tm  tstruct;
-    char       buf[80];
+    char       buf[80];    
     tstruct = *localtime(&now);
-    strftime(buf, sizeof(buf), "%d-%m-%Y.%X", &tstruct);
+    strftime(buf, sizeof(buf), "%d_%m_%Y_%H.%M.%S", &tstruct);
 
     return buf;
 }
