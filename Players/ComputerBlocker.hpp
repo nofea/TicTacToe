@@ -15,6 +15,7 @@ private:
     std::vector<std::list<std::pair<int,int>>> vecVictoryConditions;
     std::list<std::pair<int,int>> listEnemyPositions;
     std::list<std::pair<int,int>> listMyPositions;
+    Commons* objCommons;
 public:
     ComputerBlocker();
     ComputerBlocker(int& iPlayerChoice);

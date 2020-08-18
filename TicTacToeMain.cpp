@@ -23,6 +23,7 @@ int main()
     pair<int, int> pairCoords = pair<int,int>(-1,-1);
     signed int iRetry = 0;
     int iWinningPlayable = -1;
+    Commons* objCommmons = Commons::GetInstance();
 
     try
     {
@@ -51,14 +52,14 @@ int main()
 
             if(sPlayable == "X")
             {
-                H1.SetPlayable(Playable_X);
-                CB.SetPlayable(Playable_O);
+                H1.SetPlayable(objCommmons->Playable_X);
+                CB.SetPlayable(objCommmons->Playable_O);
                 break;
             }
             else if(sPlayable == "O")
             {
-                H1.SetPlayable(Playable_O);
-                CB.SetPlayable(Playable_X);
+                H1.SetPlayable(objCommmons->Playable_O);
+                CB.SetPlayable(objCommmons->Playable_X);
                 break;
             }
             else
@@ -88,7 +89,7 @@ int main()
     cout << "X goes first" << endl;
     iMoveCounter++;  
 
-    if(CB.GetPlayable() == Playable_X)
+    if(CB.GetPlayable() == objCommmons->Playable_X)
     {
         try
         {

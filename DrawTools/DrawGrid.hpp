@@ -3,11 +3,12 @@
 
 #include <vector>
 #include <string>
+#include "Commons.hpp"
 
 class DrawGrid
 {
 private:
-    /* data */
+    Commons* ObjCommons;
 public:
     DrawGrid();
     ~DrawGrid();

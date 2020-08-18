@@ -1,10 +1,11 @@
 #include "DrawGrid.hpp"
-#include "Commons.hpp"
+
 
 using namespace std;
 
 DrawGrid::DrawGrid()
 {
+    ObjCommons = Commons::GetInstance();
 }
 
 DrawGrid::~DrawGrid()
@@ -31,11 +32,11 @@ string DrawGrid::DrawGameBoard(const vector<vector<int>>& vecGameBoard)
         {
             switch (*jt)
             {
-                case Playable_X:
+                case ObjCommons->Playable_X:
                     sGB += "X";
                     break;
                 
-                case Playable_O:
+                case ObjCommons->Playable_O:
                     sGB += "O";
                     break;
                 

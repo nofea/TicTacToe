@@ -10,6 +10,7 @@ ComputerBlocker::ComputerBlocker()
 ComputerBlocker::ComputerBlocker(int& iPlayerChoice)
 {
     iPlayable = iPlayerChoice;
+    objCommons = Commons::GetInstance();
 }
 
 ComputerBlocker::ComputerBlocker(const ComputerBlocker& obj)
