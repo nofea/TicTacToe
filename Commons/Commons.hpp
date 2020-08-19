@@ -33,6 +33,14 @@ public:
         MatrixProperties_SecondaryDiagonal
     };
 
+    enum GameSettings
+    {
+        GameSettings_None,
+        GameSettings_GameMode,
+        GameSettings_ComputerMatchSpeed,
+        GameSettings_Max       
+    };
+
     enum GameMode
     {
         GameMode_None,

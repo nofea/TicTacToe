@@ -20,7 +20,13 @@ Arena& Arena::operator=(const Arena& obj)
     return *this;
 }
 
-bool Arena::PlayMatch()
+bool Arena::PlayMatch(map<Commons::GameSettings, int> mapGameSettings)
+{
+    bool bRetVal = false;
+    return bRetVal;
+}
+
+bool Arena::MatchSetup()
 {
     bool bRetVal = false;
     return bRetVal;
