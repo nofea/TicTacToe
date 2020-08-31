@@ -17,6 +17,14 @@ private:
 
 public:
 
+    enum PlayerType
+    {
+        PlayerType_None,
+        PlayerType_Human,
+        PlayerType_ComputerBlocker,
+        PlayerType_Max
+    };
+
     enum Playable
     {
         Playable_None,
@@ -45,8 +53,10 @@ public:
     {
         GameMode_None,
         GameMode_HumanVComputer,
+        GameMode_ComputerVComputer,
         GameMode_HumanVHuman,
-        GameMode_ComputerVComputer
+        GameMode_Max
+        
     };
 
     enum GameSettingsComputerMatchSpeed

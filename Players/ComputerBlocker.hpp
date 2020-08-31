@@ -8,7 +8,7 @@
 #include "Player.hpp"
 #include "Commons.hpp"
 
-class ComputerBlocker : Player
+class ComputerBlocker : public Player
 {
 private:
     int iPlayable;

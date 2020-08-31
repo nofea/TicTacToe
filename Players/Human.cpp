@@ -1,5 +1,7 @@
 #include "Human.hpp"
 
+using namespace std;
+
 Human::Human()
 {
 }
@@ -33,4 +35,14 @@ void Human::SetPlayable(int iPlayerChoice)
 int Human::GetPlayable()
 {
     return(iPlayable);
+}
+
+pair<int,int> Human::ComputeMove(const vector<vector<int>>& vecGameBoard)
+{
+    return pair<int,int>(-1,-1);
+}
+
+bool Human::RememberMyPosition(const std::pair<int,int>& pairCoords)
+{
+    return false;
 }

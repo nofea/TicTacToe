@@ -1,29 +1,25 @@
 #include <iostream>
 #include <string>
-#include <algorithm>
+#include <map>
 #include "Commons.hpp"
 #include "GameBoard.hpp"
 #include "Logger.hpp"
 #include "ComputerBlocker.hpp"
 #include "Human.hpp"
 #include "DrawGrid.hpp"
+#include "Arena.hpp"
 
 
 using namespace std;
 
 int main()
 {   
-    string sPlayable(""), sGameBoard("");
-    Human H1;
-    ComputerBlocker CB;
     Logger Log;
-    DrawGrid DG;
-    signed int iXCoord = 0, iYCoord = 0, iMoveCounter = 0;
-    bool bMarked = false;
-    pair<int, int> pairCoords = pair<int,int>(-1,-1);
-    signed int iRetry = 0;
-    int iWinningPlayable = -1;
-    Commons* objCommmons = Commons::GetInstance();
+    Commons* objCommons = Commons::GetInstance();
+    Arena A;
+    int iGameMode = 0;
+    bool bGameModeSelected = false;
+    map<Commons::GameSettings, int> mapGameSettings;
 
     try
     {
@@ -38,190 +34,40 @@ int main()
     {
         cerr << e.what() << endl;
     }
-    
-    cout << "Welcome to a game of Tic Tac Toe" << endl;
 
-    while (1) //change this!!!
+    cout << "Welcome to a game of Tic Tac Toe!!!" << endl << endl << endl;
+
+    while(!bGameModeSelected)
     {
-        cout << "Do you want to be X's or O's?" << endl;
-        cin >> sPlayable;
+        cout << "Choose Game Mode" << endl << endl;
 
-        try
-        {
-            transform(sPlayable.begin(), sPlayable.end(), sPlayable.begin(), ::toupper);
+        cout << "(1) Versus Computer" << endl;
+        cout << "(2) Computer Versus Computer" << endl;
 
-            if(sPlayable == "X")
-            {
-                H1.SetPlayable(objCommmons->Playable_X);
-                CB.SetPlayable(objCommmons->Playable_O);
-                break;
-            }
-            else if(sPlayable == "O")
-            {
-                H1.SetPlayable(objCommmons->Playable_O);
-                CB.SetPlayable(objCommmons->Playable_X);
-                break;
-            }
-            else
-            {
-                cout << "Bruh, pick X or O..." << endl;
-                Log.LogError("The Human is being daft!!!", iMoveCounter);
-            }
-        }
-        catch(const std::exception& e)
+        cin >> iGameMode;
+
+        if(iGameMode > objCommons->GameMode_ComputerVComputer || 
+            iGameMode < objCommons->GameMode_HumanVComputer)
         {
-            cerr << e.what() << endl;
-            Log.LogError(e.what(), iMoveCounter);
+            cout << "Pick (1) or (2) Doofus!!!" << endl;
         }
+        else
+        {
+            bGameModeSelected = true;
+        } 
     }
     
-    Log.LogMessage("The Human chose: "+ to_string(H1.GetPlayable()), iMoveCounter);
-    Log.LogMessage("The Computer was given: "+ to_string(CB.GetPlayable()), iMoveCounter);
-
-    GameBoard GB(DEFAULTGAMEBOARDSIZE);
-    Log.LogMessage("Game Board Initialized with size: "+ to_string(DEFAULTGAMEBOARDSIZE), iMoveCounter);
-
-    sGameBoard = DG.DrawGameBoard(GB.ShowGameBoard());
-    cout << "The Game Board:" << endl;
-    cout << sGameBoard << endl;
-    Log.LogMessage("\n"+sGameBoard, iMoveCounter);
+    mapGameSettings.insert(pair<Commons::GameSettings,int>(objCommons->GameSettings_GameMode, iGameMode));
     
-    cout << "X goes first" << endl;
-    iMoveCounter++;  
-
-    if(CB.GetPlayable() == objCommmons->Playable_X)
-    {
-        try
-        {
-            while(++iRetry < NUMBEROFRETRIES)
-            {
-                pairCoords = CB.ComputeMove(GB.ShowGameBoard());
-                if(GB.MarkBoard(pairCoords, CB.GetPlayable()))
-                {
-                    CB.RememberMyPosition(pairCoords);
-                    break;
-                }
-            }
-            iRetry = 0;
-            Log.LogMessage("The Computer played: "+ to_string(pairCoords.first)+ ", " + to_string(pairCoords.second), iMoveCounter);
-              
-            sGameBoard = DG.DrawGameBoard(GB.ShowGameBoard());
-            cout << "The Game Board:" << endl;
-            cout << sGameBoard << endl;
-            Log.LogMessage("\n"+sGameBoard, iMoveCounter);
-        }
-        catch(const std::exception& e)
-        {
-            cerr << e.what() << endl;
-            Log.LogError(e.what(), iMoveCounter);
-        }
-    }
+    // implementation of game speed pending
+    mapGameSettings.insert(pair<Commons::GameSettings,int>(objCommons->GameSettings_ComputerMatchSpeed, objCommons->GameSettingsMatchSpeed_NORMAL));
     
-
-    // and so let the games begin...
-    while(!GB.IsEndOfGame())
+    Log.LogMessage("Game Mode: " + to_string(mapGameSettings.at(objCommons->GameSettings_GameMode)));
+    Log.LogMessage("Comuter Match Speed: " + to_string(mapGameSettings.at(objCommons->GameSettings_ComputerMatchSpeed)));
+    if(!A.PlayMatch(mapGameSettings, Log))
     {
-        bMarked = false;
-        pairCoords = pair<int,int>(-1,-1);   
-        
-        cout << "Key in x y Coordinates" << endl;
-
-        while(!bMarked)
-        {
-            cin >> iXCoord >> iYCoord;
-
-            if(iXCoord < DEFAULTGAMEBOARDSIZE && iYCoord < DEFAULTGAMEBOARDSIZE)
-            {
-                Log.LogMessage("The Human keyed in: "+ to_string(iXCoord) +", "+ to_string(iYCoord), iMoveCounter);
-
-                try
-                {
-                    if(!GB.MarkBoard(pair<signed int, signed int>(iXCoord, iYCoord), H1.GetPlayable()))
-                    {
-                        Log.LogError("The Human keyed in: "+ to_string(iXCoord) +", "+ to_string(iYCoord), iMoveCounter);
-                        cout << "This coordinate is already marked, pick a different position..." << endl; 
-                    }
-                    else
-                    {
-                        bMarked = true;
-                    }  
-                }
-                catch(const std::exception& e)
-                {
-                    cerr << e.what() << endl;
-                    Log.LogError(e.what(), iMoveCounter);
-                }
-                                 
-            }
-            else
-            {
-                Log.LogError("The Human keyed in: "+ to_string(iXCoord) +", "+ to_string(iYCoord), iMoveCounter);
-                cout << "The x and y coordinates have to be between and including 0 and "+ to_string(DEFAULTGAMEBOARDSIZE - 1) << endl;
-                cout << "Try again..." << endl; 
-            }
-        }
-
-        try
-        {
-            while(++iRetry < NUMBEROFRETRIES)
-            {
-                pairCoords = CB.ComputeMove(GB.ShowGameBoard());
-                if(GB.MarkBoard(pairCoords, CB.GetPlayable()))
-                {
-                    CB.RememberMyPosition(pairCoords);
-                    break;
-                }
-            }
-            iRetry = 0;
-            
-            Log.LogMessage("The Computer played: "+ to_string(pairCoords.first)+ ", " + to_string(pairCoords.second), iMoveCounter);    
-        }
-        catch(const std::exception& e)
-        {
-            cerr << e.what() << endl;
-            Log.LogError(e.what(), iMoveCounter);
-        }
-
-        sGameBoard = DG.DrawGameBoard(GB.ShowGameBoard());
-        cout << "The Game Board:" << endl;
-        cout << sGameBoard << endl;
-        Log.LogMessage("\n"+sGameBoard, iMoveCounter);
-
-        iMoveCounter++;
+        cout << "Error! Something has gone wrong in the Arena" << endl;
     }
-    
-    cout << endl;
-    cout << endl;
-    cout << "Game Over!!!" << endl;
-    Log.LogMessage("Game Over!!!");
-
-    iWinningPlayable = GB.GetWinningPlayable();
-
-    if(iWinningPlayable == H1.GetPlayable())
-    {
-        cout << "You Won!!!" << endl;
-        Log.LogMessage("You Won!!!");
-    }
-    else if(iWinningPlayable == CB.GetPlayable())
-    {
-        cout << "The Computer Won!!!" << endl;
-        Log.LogMessage("The Computer Won!!!");
-    }
-    else
-    {
-        cout << "It was a Stalemate!!!" << endl;
-        Log.LogMessage("It was a Stalemate!!!");
-    }
-    
-
-    sGameBoard = DG.DrawGameBoard(GB.ShowGameBoard());
-    cout << "The Game Board:" << endl;
-    cout << sGameBoard << endl;
-    Log.LogMessage("\n"+sGameBoard, iMoveCounter); 
-
-    // wait for user input
-    cin.get(); // safety workaround
-    cin.get(); 
 
     Log.CloseLoggerFile();
     return 0;
