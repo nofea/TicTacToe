@@ -87,10 +87,6 @@ bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, Logger& 
         Log.LogMessage("Player 1 is "+ to_string(ObjPlayer_1->GetPlayable()), iMoveCounter);
         Log.LogMessage("Player 2 is "+ to_string(ObjPlayer_2->GetPlayable()), iMoveCounter);
     }
-    else
-    {
-        
-    }
 
     GameBoard GB(DEFAULTGAMEBOARDSIZE);
     Log.LogMessage("Game Board Initialized with size: "+ to_string(DEFAULTGAMEBOARDSIZE), iMoveCounter);
@@ -125,10 +121,6 @@ bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, Logger& 
             {
                 Log.LogMessage("Player 2 played: "+ to_string(pairCoords.first)+ ", " + to_string(pairCoords.second), iMoveCounter);
             }
-            else
-            {
-
-            }
             
             sGameBoard = DG.DrawGameBoard(GB.ShowGameBoard());
             cout << "The Game Board:" << endl;
@@ -152,14 +144,7 @@ bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, Logger& 
         {
             cout << "Key in x y Coordinates" << endl;
         }
-        else if(mapGameSettings.at(objCommons->GameSettings_GameMode) == objCommons->GameMode_ComputerVComputer)
-        {
-            
-        }
-        else
-        {
-            
-        }
+
     
         while(!bMarked)
         {
@@ -173,10 +158,6 @@ bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, Logger& 
                 iXCoord = pairCoords.first;
                 iYCoord = pairCoords.second;
             }
-            else
-            {
-                
-            }
             
 
             if(iXCoord < DEFAULTGAMEBOARDSIZE && iYCoord < DEFAULTGAMEBOARDSIZE)
@@ -189,12 +170,7 @@ bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, Logger& 
                 {
                     Log.LogMessage("Player 1 keyed in: "+ to_string(iXCoord) +", "+ to_string(iYCoord), iMoveCounter);
                 }
-                else
-                {
-                    
-                }
                 
-
                 try
                 {
                     if(!GB.MarkBoard(pair<signed int, signed int>(iXCoord, iYCoord), ObjPlayer_1->GetPlayable()))
@@ -208,11 +184,6 @@ bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, Logger& 
                         {
                             Log.LogError("Player 1 keyed in: "+ to_string(iXCoord) +", "+ to_string(iYCoord), iMoveCounter);
                         }
-                        else
-                        {
-                            /* code */
-                        }
-                        
                 
                     }
                     else
@@ -240,10 +211,6 @@ bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, Logger& 
                 {
                     Log.LogError("Player 1 keyed in "+ to_string(iXCoord) +", "+ to_string(iYCoord), iMoveCounter);
                 }
-                else
-                {
-                    /* code */
-                } 
             }
         }
 
@@ -267,12 +234,7 @@ bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, Logger& 
             else if(mapGameSettings.at(objCommons->GameSettings_GameMode) == objCommons->GameMode_ComputerVComputer)
             {
                 Log.LogMessage("Player 2 played: "+ to_string(pairCoords.first)+ ", " + to_string(pairCoords.second), iMoveCounter);    
-            }
-            else
-            {
-                /* code */
-            }
-            
+            }        
             
         }
         catch(const std::exception& e)
@@ -309,10 +271,6 @@ bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, Logger& 
             cout << "Player 1 Wins!!!" << endl;
             Log.LogMessage("Player 1 Wins!!!");
         }
-        else
-        {
-            
-        }
     }
     else if(iWinningPlayable == ObjPlayer_2->GetPlayable())
     {
@@ -325,10 +283,6 @@ bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, Logger& 
         {
             cout << "Player 2 Wins!!!" << endl;
             Log.LogMessage("Player 2 Wins!!!");
-        }
-        else
-        {
-            
         }
     }
     else
