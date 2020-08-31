@@ -16,7 +16,7 @@ CPPFLAGS ?= $(INC_FLAGS) -MMD -MP
 LCPP = g++ 
 
 # General compiler flags
-COMPILE_FLAGS = -std=c++14 -Wall -Wextra -g
+COMPILE_FLAGS = -std=c++17 -Wall -Wextra -g
 
 # Space-separated pkg-config libraries used by this project
 LIBS = -static-libgcc -static-libstdc++

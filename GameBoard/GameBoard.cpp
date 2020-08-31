@@ -6,6 +6,7 @@ GameBoard::GameBoard()
 {
     iBoardSize = 0;
     iWinningPlayable = -1;
+    objCommons = Commons::GetInstance();
 }
 
 GameBoard::~GameBoard()
@@ -60,47 +61,47 @@ bool GameBoard::IsEndOfGame()
         //check the rows and cols
         for(int j = 0; j < iBoardSize; j++)
         {
-            if(vecGameBoard.at(i).at(j) == Playable_X)
+            if(vecGameBoard.at(i).at(j) == objCommons->Playable_X)
             {
-                listRowX.push_back(Playable_X);
+                listRowX.push_back(objCommons->Playable_X);
             }
-            else if(vecGameBoard.at(i).at(j) == Playable_O)
+            else if(vecGameBoard.at(i).at(j) == objCommons->Playable_O)
             {
-                listRowO.push_back(Playable_O);
+                listRowO.push_back(objCommons->Playable_O);
             }
 
-            if(vecGameBoard.at(j).at(i) == Playable_X)
+            if(vecGameBoard.at(j).at(i) == objCommons->Playable_X)
             {
-                listColX.push_back(Playable_X);
+                listColX.push_back(objCommons->Playable_X);
             }
-            else if(vecGameBoard.at(j).at(i) == Playable_O)
+            else if(vecGameBoard.at(j).at(i) == objCommons->Playable_O)
             {
-                listColO.push_back(Playable_O);
+                listColO.push_back(objCommons->Playable_O);
             }
         }
 
         if(listRowX.size() == iBoardSize)
         {
-            SaveVictorySet(MatrixProperties_Row, i);
-            iWinningPlayable = Playable_X;
+            SaveVictorySet(objCommons->MatrixProperties_Row, i);
+            iWinningPlayable = objCommons->Playable_X;
             return true;
         }
         else if(listRowO.size() == iBoardSize)
         {
-            SaveVictorySet(MatrixProperties_Row, i);
-            iWinningPlayable = Playable_O;
+            SaveVictorySet(objCommons->MatrixProperties_Row, i);
+            iWinningPlayable = objCommons->Playable_O;
             return true;
         }
         else if(listColX.size() == iBoardSize)
         {
-            SaveVictorySet(MatrixProperties_Column, i);
-            iWinningPlayable = Playable_X;
+            SaveVictorySet(objCommons->MatrixProperties_Column, i);
+            iWinningPlayable = objCommons->Playable_X;
             return true;
         }
         else if(listColO.size() == iBoardSize)
         {
-            SaveVictorySet(MatrixProperties_Column, i);
-            iWinningPlayable = Playable_O;
+            SaveVictorySet(objCommons->MatrixProperties_Column, i);
+            iWinningPlayable = objCommons->Playable_O;
             return true;
         }
         else
@@ -111,47 +112,47 @@ bool GameBoard::IsEndOfGame()
             listColO.clear();
         }
 
-        if(vecGameBoard.at(i).at(i) == Playable_X)
+        if(vecGameBoard.at(i).at(i) == objCommons->Playable_X)
         {
-            listPDiaX.push_back(Playable_X);
+            listPDiaX.push_back(objCommons->Playable_X);
         }
-        else if(vecGameBoard.at(i).at(i) == Playable_O)
+        else if(vecGameBoard.at(i).at(i) == objCommons->Playable_O)
         {
-            listPDiaO.push_back(Playable_O);
+            listPDiaO.push_back(objCommons->Playable_O);
         }
 
-        if(vecGameBoard.at(i).at(k) == Playable_X)
+        if(vecGameBoard.at(i).at(k) == objCommons->Playable_X)
         {
-            listSDiaX.push_back(Playable_X);
+            listSDiaX.push_back(objCommons->Playable_X);
         }
-        else if(vecGameBoard.at(i).at(k) == Playable_O)
+        else if(vecGameBoard.at(i).at(k) == objCommons->Playable_O)
         {
-            listSDiaO.push_back(Playable_O);
+            listSDiaO.push_back(objCommons->Playable_O);
         }
     }
 
     if(listPDiaX.size() == iBoardSize)
     {
-        SaveVictorySet(MatrixProperties_PrimaryDiagonal, iTemp);
-        iWinningPlayable = Playable_X;
+        SaveVictorySet(objCommons->MatrixProperties_PrimaryDiagonal, iTemp);
+        iWinningPlayable = objCommons->Playable_X;
         retVal = true;
     }
     else if(listPDiaO.size() == iBoardSize)
     {
-        SaveVictorySet(MatrixProperties_PrimaryDiagonal, iTemp);
-        iWinningPlayable = Playable_O;
+        SaveVictorySet(objCommons->MatrixProperties_PrimaryDiagonal, iTemp);
+        iWinningPlayable = objCommons->Playable_O;
         retVal = true;
     }
     else if(listSDiaX.size() == iBoardSize)
     {
-        SaveVictorySet(MatrixProperties_SecondaryDiagonal, iTemp);
-        iWinningPlayable = Playable_X;
+        SaveVictorySet(objCommons->MatrixProperties_SecondaryDiagonal, iTemp);
+        iWinningPlayable = objCommons->Playable_X;
         retVal = true;
     }
     else if(listSDiaO.size() == iBoardSize)
     {
-        SaveVictorySet(MatrixProperties_SecondaryDiagonal, iTemp);
-        iWinningPlayable = Playable_O;
+        SaveVictorySet(objCommons->MatrixProperties_SecondaryDiagonal, iTemp);
+        iWinningPlayable = objCommons->Playable_O;
         retVal = true;
     }
     else
@@ -182,32 +183,32 @@ bool GameBoard::IsEndOfGame()
     return retVal;
 }
 
-bool GameBoard::SaveVictorySet(MatrixProperties Property, int& iIndex)
+bool GameBoard::SaveVictorySet(Commons::MatrixProperties Property, int& iIndex)
 {
     switch(Property)
     {
-        case MatrixProperties_Row:
+        case objCommons->MatrixProperties_Row:
         for(int iCount = 0; iCount < iBoardSize; iCount++)
         {
             listVictorySet.push_back(pair<int,int> {iIndex, iCount});
         }
         break;
 
-        case MatrixProperties_Column:
+        case objCommons->MatrixProperties_Column:
         for(int iCount = 0; iCount < iBoardSize; iCount++)
         {
             listVictorySet.push_back(pair<int,int> {iCount, iIndex});
         }
         break;
 
-        case MatrixProperties_PrimaryDiagonal:
+        case objCommons->MatrixProperties_PrimaryDiagonal:
         for(int iCount = 0; iCount < iBoardSize; iCount++)
         {
             listVictorySet.push_back(pair<int,int> {iCount, iCount});
         }
         break;
 
-        case MatrixProperties_SecondaryDiagonal:
+        case objCommons->MatrixProperties_SecondaryDiagonal:
         for(int iCount = 0, jCount = (iBoardSize - 1); iCount < iBoardSize, jCount >= 0; iCount++, jCount--)
         {
             listVictorySet.push_back(pair<int,int> {iCount, jCount});    

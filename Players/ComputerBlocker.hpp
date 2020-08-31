@@ -8,13 +8,14 @@
 #include "Player.hpp"
 #include "Commons.hpp"
 
-class ComputerBlocker : Player
+class ComputerBlocker : public Player
 {
 private:
     int iPlayable;
     std::vector<std::list<std::pair<int,int>>> vecVictoryConditions;
     std::list<std::pair<int,int>> listEnemyPositions;
     std::list<std::pair<int,int>> listMyPositions;
+    Commons* objCommons;
 public:
     ComputerBlocker();
     ComputerBlocker(int& iPlayerChoice);

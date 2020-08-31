@@ -14,10 +14,11 @@ private:
     std::vector<std::vector<int>> vecGameBoard;
     std::list<std::pair<int,int>> listVictorySet;
     int iWinningPlayable;
+    Commons* objCommons;
 
 private:
     GameBoard();
-    bool SaveVictorySet(MatrixProperties Property, int& iIndex);
+    bool SaveVictorySet(Commons::MatrixProperties Property, int& iIndex);
 
 public:   
     GameBoard(int iSize);
