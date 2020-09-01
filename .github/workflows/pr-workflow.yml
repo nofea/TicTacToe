@@ -53,7 +53,9 @@ jobs:
       
       - name: Run Binary
         id: run_binary
-        run: ./tictactoe 2
+        run:  |
+          cd TicTacToe/TicTacToe
+          ./tictactoe.out 2
 
       - name: Review Log File
         id: review_log_file
@@ -80,7 +82,7 @@ jobs:
       
       - name: Run EXE
         id: run_exe
-        run: tictactoe.exe 2
+        run: .\tictactoe.exe 2
 
       - name: Review Log File
         id: review_log_file
