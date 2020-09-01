@@ -22,7 +22,7 @@ Arena& Arena::operator=(const Arena& obj)
     return *this;
 }
 
-bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, Logger& Log)
+bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, bool& bAutisticMode, Logger& Log)
 {
     bool bRetVal = false;
     string sPlayable(""), sGameBoard("");
@@ -43,7 +43,7 @@ bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, Logger& 
     
     if (mapGameSettings.at(objCommons->GameSettings_GameMode) == objCommons->GameMode_HumanVComputer)
     {
-        while (1) //change this!!!
+        while (!bAutisticMode) //change this!!!
         {
             cout << "Do you want to be X's or O's?" << endl;
             cin >> sPlayable;
@@ -75,6 +75,28 @@ bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, Logger& 
                 cerr << e.what() << endl;
                 Log.LogError(e.what(), iMoveCounter);
             }
+        }
+
+        if(bAutisticMode)
+        {
+            if(mapGameSettings.at(objCommons->GameSettings_PlayerType) == objCommons->Playable_O)
+            {
+                ObjPlayer_1->SetPlayable(objCommons->Playable_O);
+                ObjPlayer_2->SetPlayable(objCommons->Playable_X);
+            }
+            else if(mapGameSettings.at(objCommons->GameSettings_PlayerType) == objCommons->Playable_O)
+            {
+                ObjPlayer_1->SetPlayable(objCommons->Playable_X);
+                ObjPlayer_2->SetPlayable(objCommons->Playable_O);
+            }
+            else
+            {
+                cout << "Invalid Player Type" << endl;
+                cout << "Exiting Game..." << endl;
+                return bRetVal;
+            }
+            
+            
         }
         Log.LogMessage("The Human chose: "+ to_string(ObjPlayer_1->GetPlayable()), iMoveCounter);
         Log.LogMessage("The Computer was given: "+ to_string(ObjPlayer_2->GetPlayable()), iMoveCounter);
@@ -297,9 +319,13 @@ bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, Logger& 
     cout << sGameBoard << endl;
     Log.LogMessage("\n"+sGameBoard, iMoveCounter); 
 
-    // wait for user input
-    cin.get(); // safety workaround
-    cin.get(); 
+    if(!bAutisticMode)
+    {
+        // wait for user input
+        cin.get(); // safety workaround
+        cin.get(); 
+    }
+
     return bRetVal;
 }
 

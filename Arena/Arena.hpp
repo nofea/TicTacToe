@@ -19,7 +19,7 @@ public:
     Arena(const Arena& obj);
     Arena& operator= (const Arena& obj);
 
-    bool PlayMatch(std::map<Commons::GameSettings, int>& mapGameSettings, Logger& Log);
+    bool PlayMatch(std::map<Commons::GameSettings, int>& mapGameSettings, bool& bAutisticMode, Logger& Log);
 
 private:
     bool MatchSetup(std::map<Commons::GameSettings, int>& mapGameSettings, PlayerFactory& PF, Logger& Log);
