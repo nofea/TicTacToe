@@ -13,14 +13,84 @@ jobs:
 
     steps:
 
-    - name: Install dependency 
-      id: install_dependency
-      run: sudo apt install mingw-w64
+      - name: Install dependency 
+        id: install_dependency
+        run: sudo apt install mingw-w64
 
-    - name: Check Out
-      id: check_out
-      uses: actions/checkout@v2
-    
-    - name: Make
-      id: make
-      run: make all
+      - name: Check Out
+        id: check_out
+        uses: actions/checkout@v2
+
+      - name: Make
+        id: make
+        run: make all
+
+      - name: Upload Linux Binary
+        id: upload_linux_binary
+        uses: actions/upload-artifact@v2
+        with: 
+          name: Linux_Binary
+          path: build_linux/tictactoe.out
+
+      - name: Upload Windows EXE
+        id: upload_windows_exe
+        uses: actions/upload-artifact@v2
+        with:
+          name: Windows_EXE
+          path: build_windows/tictactoe.exe
+
+  test_on_ubuntu:
+
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Download Binary
+        id: download_binary
+        uses: actions/download-artifact@v2
+        with:
+          name: Linux_Binary
+      
+      - name: Run Binary
+        id: run_binary
+        run: ./tictactoe 2
+
+      - name: Review Log File
+        id: review_log_file
+        run: |
+          python
+          import glob
+          
+          for file in glob.glob("log*.txt"):
+            str = open(file, "r").read()
+            if(str.count("LOG_ERROR") > 1):
+              print("Ubuntu Test Case: Failed!!!")
+
+
+  test_on_windows:
+
+    runs-on: windows-latest
+    needs: build
+    steps:
+      - name: Download EXE
+        id: download_exe
+        uses: actions/download-artifact@v2
+        with:
+          name: Windows_EXE
+      
+      - name: Run EXE
+        id: run_exe
+        run: tictactoe.exe 2
+
+      - name: Review Log File
+        id: review_log_file
+        run: |
+          python
+          import glob
+          
+          for file in glob.glob("log*.txt"):
+            str = open(file, "r").read()
+            if(str.count("LOG_ERROR") > 1):
+              print("Windows Test Case: Failed!!!")
+
+

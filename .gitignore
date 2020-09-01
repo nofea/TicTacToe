@@ -1,3 +1,5 @@
 # ignore the following for git repos
 
 .vscode/
+build_linux/
+build_windows/
