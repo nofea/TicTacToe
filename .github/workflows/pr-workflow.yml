@@ -54,7 +54,6 @@ jobs:
       - name: Run Binary
         id: run_binary
         run: |
-          sudo 
           ./tictactoe.out 2
 
       - name: Review Log File

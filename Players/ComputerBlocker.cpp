@@ -52,6 +52,7 @@ pair<int,int> ComputerBlocker::ComputeMove(const vector<vector<int>>& vecGameBoa
     vector<int>::iterator itMax;
     int iBoardSize = vecGameBoard.size();
     bool bFound = false;
+    vector<pair<int,int>> vecEmptySpaces;
 
     if(vecVictoryConditions.empty())
     {
@@ -89,10 +90,16 @@ pair<int,int> ComputerBlocker::ComputeMove(const vector<vector<int>>& vecGameBoa
                 vecPredictionCounter.erase(itMax);
             }
             
+            if(vecPredictionCounter.size() == 0)
+            {
+                //concede
+                break;
+            }
+
             itMax = max_element(vecPredictionCounter.begin(), vecPredictionCounter.end());  
             iVictoryCondition = itMax - vecPredictionCounter.begin();
 
-            if(vecPredictionCounter.at(iVictoryCondition) == iBoardSize)
+            if(vecPredictionCounter.at(iVictoryCondition) == iBoardSize) // this line is causing problems!!!
             {
                 // concede
                 break;
@@ -111,6 +118,17 @@ pair<int,int> ComputerBlocker::ComputeMove(const vector<vector<int>>& vecGameBoa
                         break;
                     }
                 }
+            }
+        }
+        
+        if(!bFound)
+        {
+            vecEmptySpaces = GetEmptySpaces(vecGameBoard);
+
+            if(!vecEmptySpaces.empty())
+            {
+                iCoordinate = rand() % vecEmptySpaces.size();
+                pairCoordinates = vecEmptySpaces.at(iCoordinate);
             }
         }     
     }
@@ -199,4 +217,25 @@ bool ComputerBlocker::AlreadyMadeThisMove(const pair<int,int>& pairCoords)
     }
 
     return retValue;
+}
+
+//optimize this
+vector<pair<int,int>> ComputerBlocker::GetEmptySpaces(const vector<vector<int>>& vecGameBoard)
+{
+    vector<pair<int,int>> vecEmptySpaces;
+
+    int iGameBoardSize = vecGameBoard.size();
+
+    for(int i = 0; i < iGameBoardSize; i++)
+    {
+        for (int j = 0; j < iGameBoardSize; j++)
+        {
+            if(vecGameBoard.at(i).at(j) == -1)
+            {
+                vecEmptySpaces.push_back(pair<int,int>(i, j));
+            } 
+        }
+    }
+
+    return vecEmptySpaces;
 }
