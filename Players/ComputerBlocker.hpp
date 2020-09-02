@@ -27,6 +27,7 @@ private:
     bool MakeVictoryConditionsList(int& iGameBoardSize);
     bool UpdateEnemyPosition(const std::vector<std::vector<int>>& vecGameBoard);
     bool AlreadyMadeThisMove(const std::pair<int,int>& pairCoords);
+    std::vector<std::pair<int,int>> GetEmptySpaces(const std::vector<std::vector<int>>& vecGameBoard); 
 
 public:
     void SetPlayable(int iPlayerChoice);
