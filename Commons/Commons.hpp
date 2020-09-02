@@ -46,6 +46,7 @@ public:
         GameSettings_None,
         GameSettings_GameMode,
         GameSettings_ComputerMatchSpeed,
+        GameSettings_PlayerType,
         GameSettings_Max       
     };
 
