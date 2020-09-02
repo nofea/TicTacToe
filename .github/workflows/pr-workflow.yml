@@ -50,10 +50,14 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: Linux_Binary
+
+      - name: Granting Permissions
+        id: granting_permission
+        run: chmod +x tictactoe.out
       
       - name: Run Binary
         id: run_binary
-        run: chmod +x ./tictactoe.out 2
+        run: ./tictactoe.out 2
 
   test_on_windows:
 
