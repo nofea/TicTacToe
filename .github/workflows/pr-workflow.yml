@@ -53,20 +53,7 @@ jobs:
       
       - name: Run Binary
         id: run_binary
-        run: |
-          ./tictactoe.out 2
-
-      - name: Review Log File
-        id: review_log_file
-        run: |
-          python
-          import glob
-          
-          for file in glob.glob("log*.txt"):
-            str = open(file, "r").read()
-            if(str.count("LOG_ERROR") > 1):
-              print("Ubuntu Test Case: Failed!!!")
-
+        run:  ./tictactoe.out 2
 
   test_on_windows:
 
@@ -82,16 +69,3 @@ jobs:
       - name: Run EXE
         id: run_exe
         run: .\tictactoe.exe 2
-
-      - name: Review Log File
-        id: review_log_file
-        run: |
-          python
-          import glob
-          
-          for file in glob.glob("log*.txt"):
-            str = open(file, "r").read()
-            if(str.count("LOG_ERROR") > 1):
-              print("Windows Test Case: Failed!!!")
-
-
