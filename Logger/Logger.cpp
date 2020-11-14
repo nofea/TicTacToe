@@ -59,6 +59,15 @@ bool Logger::LogError(string sError, signed int& iTurnCount)
     return RetVal;
 }
 
+bool Logger::LogError(string sError)
+{
+    bool RetVal = true;
+
+    log << GetCurrentDateTime() << ": LOG_ERROR: " << sError << endl;
+
+    return RetVal;
+}
+
 bool Logger::CloseLoggerFile()
 {
     log.close();

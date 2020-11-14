@@ -43,61 +43,23 @@ bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, bool& bA
     
     if (mapGameSettings.at(objCommons->GameSettings_GameMode) == objCommons->GameMode_HumanVComputer)
     {
-        while (!bAutisticMode) //change this!!!
+        if(mapGameSettings.at(objCommons->GameSettings_PlayerType) == objCommons->Playable_O)
         {
-            cout << "Do you want to be X's or O's?" << endl;
-            cin >> sPlayable;
-
-            try
-            {
-                transform(sPlayable.begin(), sPlayable.end(), sPlayable.begin(), ::toupper);
-
-                if(sPlayable == "X")
-                {
-                    ObjPlayer_1->SetPlayable(objCommons->Playable_X);
-                    ObjPlayer_2->SetPlayable(objCommons->Playable_O);
-                    break;
-                }
-                else if(sPlayable == "O")
-                {
-                    ObjPlayer_1->SetPlayable(objCommons->Playable_O);
-                    ObjPlayer_2->SetPlayable(objCommons->Playable_X);
-                    break;
-                }
-                else
-                {
-                    cout << "Bruh, pick X or O..." << endl;
-                    Log.LogError("The Human is being daft!!!", iMoveCounter);
-                }
-            }
-            catch(const std::exception& e)
-            {
-                cerr << e.what() << endl;
-                Log.LogError(e.what(), iMoveCounter);
-            }
+            ObjPlayer_1->SetPlayable(objCommons->Playable_O);
+            ObjPlayer_2->SetPlayable(objCommons->Playable_X);
         }
-
-        if(bAutisticMode)
+        else if(mapGameSettings.at(objCommons->GameSettings_PlayerType) == objCommons->Playable_X)
         {
-            if(mapGameSettings.at(objCommons->GameSettings_PlayerType) == objCommons->Playable_O)
-            {
-                ObjPlayer_1->SetPlayable(objCommons->Playable_O);
-                ObjPlayer_2->SetPlayable(objCommons->Playable_X);
-            }
-            else if(mapGameSettings.at(objCommons->GameSettings_PlayerType) == objCommons->Playable_O)
-            {
-                ObjPlayer_1->SetPlayable(objCommons->Playable_X);
-                ObjPlayer_2->SetPlayable(objCommons->Playable_O);
-            }
-            else
-            {
-                cout << "Invalid Player Type" << endl;
-                cout << "Exiting Game..." << endl;
-                return bRetVal;
-            }
-            
-            
+            ObjPlayer_1->SetPlayable(objCommons->Playable_X);
+            ObjPlayer_2->SetPlayable(objCommons->Playable_O);
         }
+        else
+        {
+            cout << "Invalid Player Type" << endl;
+            cout << "Exiting Game..." << endl;
+            return bRetVal;
+        }
+        
         Log.LogMessage("The Human chose: "+ to_string(ObjPlayer_1->GetPlayable()), iMoveCounter);
         Log.LogMessage("The Computer was given: "+ to_string(ObjPlayer_2->GetPlayable()), iMoveCounter);
     }
