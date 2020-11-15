@@ -104,15 +104,11 @@ int main(int argc,char* argv[])
             if(sPlayable == "X")
             {
                 mapGameSettings.insert(pair<Commons::GameSettings,Commons::Playable>(objCommons->GameSettings_PlayerType, objCommons->Playable_X));
-                //ObjPlayer_1->SetPlayable(objCommons->Playable_X);
-                //ObjPlayer_2->SetPlayable(objCommons->Playable_O);
                 bPlayableSelected = true;
             }
             else if(sPlayable == "O")
             {
                 mapGameSettings.insert(pair<Commons::GameSettings,Commons::Playable>(objCommons->GameSettings_PlayerType, objCommons->Playable_O));
-                //ObjPlayer_1->SetPlayable(objCommons->Playable_O);
-                //ObjPlayer_2->SetPlayable(objCommons->Playable_X);
                 bPlayableSelected = true;
             }
             else

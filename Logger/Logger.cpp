@@ -31,41 +31,25 @@ bool Logger::OpenLoggerFile(string sFilePathFile)
     return RetVal;
 }
 
-bool Logger::LogMessage(string sMessage)
+void Logger::LogMessage(string sMessage)
 {
-    bool RetVal = true;
-
     log << GetCurrentDateTime() <<":: LOG_MESSAGE: " << sMessage << endl;
-
-    return RetVal;
 }
 
 
-bool Logger::LogMessage(string sMessage, signed int& iTurnCount)
+void Logger::LogMessage(string sMessage, signed int& iTurnCount)
 {
-    bool RetVal = true;
-
     log << GetCurrentDateTime() << ":: TURN: " << iTurnCount << ": LOG_MESSAGE: " << sMessage << endl;
-
-    return RetVal;
 }
 
-bool Logger::LogError(string sError, signed int& iTurnCount)
+void Logger::LogError(string sError, signed int& iTurnCount)
 {
-    bool RetVal = true;
-
     log << GetCurrentDateTime() << ":: TURN: " << iTurnCount << ": LOG_ERROR: " << sError << endl;
-
-    return RetVal;
 }
 
-bool Logger::LogError(string sError)
+void Logger::LogError(string sError)
 {
-    bool RetVal = true;
-
     log << GetCurrentDateTime() << ": LOG_ERROR: " << sError << endl;
-
-    return RetVal;
 }
 
 bool Logger::CloseLoggerFile()
