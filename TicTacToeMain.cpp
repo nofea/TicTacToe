@@ -21,35 +21,27 @@ int main(int argc,char* argv[])
     bool bGameModeSelected = false;
     map<Commons::GameSettings, int> mapGameSettings;
     bool bAutisticMode = false;
+    bool bPlayableSelected = false;
+    string sPlayable("");
 
     if(argc > 1)
     {
         bAutisticMode = true;
         iGameMode = stoi(string(argv[1]));
 
-        if(iGameMode == objCommons->GameMode_ComputerVComputer)
+        if(argc < 4) // 1 + 3 for game mode, game speed and selection of X or O
         {
-            // I going to leave this empty for now as there is no real use for it, yet...
-        }
-        else if(iGameMode == objCommons->GameMode_HumanVComputer)
-        {
-            if(argc < 4) // 1 + 3 for game mode, game speed and selection of X or O
-            {
-                cout << "Error! of arguments" << endl;
-                cout << "Exiting Game..." << endl;
-                return 0;
-            }
-            iGameSpeed = stoi(string(argv[2])); // unused
-            mapGameSettings.insert(pair<Commons::GameSettings,int>(objCommons->GameSettings_PlayerType, stoi(string(argv[3]))));
-        }
-        else
-        {
-            cout << "Error! Invalid Game Mode" << endl;
+            cout << "Error! of arguments" << endl;
+            Log.LogError("Error! of arguments");
             cout << "Exiting Game..." << endl;
             return 0;
         }
+
+        iGameSpeed = stoi(string(argv[2])); // unused
+        mapGameSettings.insert(pair<Commons::GameSettings,int>(objCommons->GameSettings_PlayerType, stoi(string(argv[3]))));
            
         bGameModeSelected = true;
+        bPlayableSelected = true;
     }
 
     try
@@ -57,13 +49,17 @@ int main(int argc,char* argv[])
         if(!Log.OpenLoggerFile(LOGGERPATHNAME))
         {
             cout << "Error! Failed to Initialize Logger!" << endl;
-            cout << "Terminating..." << endl;
+            Log.LogError("Error! Failed to Initialize Logger!");
+            cout << "Exiting Game..." << endl;
             return 0;
         }
     }
     catch(const exception& e)
     {
         cerr << e.what() << endl;
+        Log.LogError(e.what());
+        cout << "Exiting Game..." << endl;
+        return 0;
     }
 
     cout << "Welcome to a game of Tic Tac Toe!!!" << endl << endl << endl;
@@ -96,6 +92,38 @@ int main(int argc,char* argv[])
     
     Log.LogMessage("Game Mode: " + to_string(mapGameSettings.at(objCommons->GameSettings_GameMode)));
     Log.LogMessage("Comuter Match Speed: " + to_string(mapGameSettings.at(objCommons->GameSettings_ComputerMatchSpeed)));
+
+    while(!bPlayableSelected)
+    {
+        cout << "Do you want to be X's or O's?" << endl;
+        cin >> sPlayable;
+
+        try
+        {
+            transform(sPlayable.begin(), sPlayable.end(), sPlayable.begin(), ::toupper);
+            if(sPlayable == "X")
+            {
+                mapGameSettings.insert(pair<Commons::GameSettings,Commons::Playable>(objCommons->GameSettings_PlayerType, objCommons->Playable_X));
+                bPlayableSelected = true;
+            }
+            else if(sPlayable == "O")
+            {
+                mapGameSettings.insert(pair<Commons::GameSettings,Commons::Playable>(objCommons->GameSettings_PlayerType, objCommons->Playable_O));
+                bPlayableSelected = true;
+            }
+            else
+            {
+                cout << "Bruh, pick X or O..." << endl;
+            }
+        }
+        catch(const std::exception& e)
+        {
+            cerr << e.what() << endl;
+            Log.LogError(e.what());
+            cout << "Exiting Game..." << endl;
+            return 0;
+        }
+    }
 
     if(!A.PlayMatch(mapGameSettings, bAutisticMode, Log))
     {
