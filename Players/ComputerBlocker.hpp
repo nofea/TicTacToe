@@ -8,6 +8,10 @@
 #include "Player.hpp"
 #include "Commons.hpp"
 
+/**
+ * @brief holds algo for AI that employs the blocker startegy   
+ * 
+ */
 class ComputerBlocker : public Player
 {
 private:

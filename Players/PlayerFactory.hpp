@@ -6,6 +6,10 @@
 #include "Human.hpp"
 #include "ComputerBlocker.hpp"
 
+/**
+ * @brief holds the factory class for generating player objects
+ * 
+ */
 class PlayerFactory
 {
 private:

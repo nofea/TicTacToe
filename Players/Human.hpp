@@ -5,6 +5,10 @@
 #include <vector>
 #include "Player.hpp"
 
+/**
+ * @brief holds the human player instance
+ * 
+ */
 class Human : public Player
 {
 private:

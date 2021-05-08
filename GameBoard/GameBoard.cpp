@@ -2,6 +2,10 @@
 
 using namespace std;
 
+/**
+ * @brief Construct a new Game Board:: Game Board object
+ * 
+ */
 GameBoard::GameBoard()
 {
     iBoardSize = 0;
@@ -9,10 +13,19 @@ GameBoard::GameBoard()
     objCommons = Commons::GetInstance();
 }
 
+/**
+ * @brief Destroy the Game Board:: Game Board object
+ * 
+ */
 GameBoard::~GameBoard()
 {
 }
 
+/**
+ * @brief Construct a new Game Board:: Game Board object
+ * 
+ * @param iSize [in] size of the game board iSize x iSize
+ */
 GameBoard::GameBoard(int iSize)
 {
     iBoardSize = iSize;
@@ -20,6 +33,11 @@ GameBoard::GameBoard(int iSize)
     InitGameBoard();
 }
 
+/**
+ * @brief Construct a new Game Board:: Game Board object
+ * 
+ * @param obj [in] object reference of class GameBoard
+ */
 GameBoard::GameBoard(const GameBoard& obj)
 {
     iBoardSize = obj.iBoardSize;
@@ -28,6 +46,12 @@ GameBoard::GameBoard(const GameBoard& obj)
     listVictorySet = obj.listVictorySet;
 }
 
+/**
+ * @brief Assignment operator for class GameBoard
+ * 
+ * @param obj   [in] object reference of class GameBoard
+ * @return GameBoard& 
+ */
 GameBoard& GameBoard::operator= (const GameBoard& obj)
 {
     this->iBoardSize = obj.iBoardSize;
@@ -37,6 +61,12 @@ GameBoard& GameBoard::operator= (const GameBoard& obj)
     return *this;
 }
 
+/**
+ * @brief Initializes game board
+ * 
+ * @return true     if the game board was initialized
+ * @return false    if the game board was not initialized
+ */
 bool GameBoard::InitGameBoard()
 {
     vector<int> vecTemp(iBoardSize, GAMEBOARDINITVALUE);
@@ -49,6 +79,12 @@ bool GameBoard::InitGameBoard()
     return true;
 }
 
+/**
+ * @brief this function checks if any one of the victory condition have been met
+ * 
+ * @return true     if the game is over
+ * @return false    if the game is still on
+ */
 bool GameBoard::IsEndOfGame()
 {
     bool retVal = false;
@@ -183,7 +219,15 @@ bool GameBoard::IsEndOfGame()
     return retVal;
 }
 
-bool GameBoard::SaveVictorySet(Commons::MatrixProperties Property, int& iIndex)
+/**
+ * @brief saves the victory set made by player
+ * 
+ * @param Property  [in] matrix properties
+ * @param iIndex    [in] position of the element on the game board
+ * @return true     if all is ok
+ * @return false    if all is not ok
+ */
+bool GameBoard::SaveVictorySet(const Commons::MatrixProperties& Property, const int& iIndex)
 {
     switch(Property)
     {
@@ -222,11 +266,24 @@ bool GameBoard::SaveVictorySet(Commons::MatrixProperties Property, int& iIndex)
     return true;
 }
 
+/**
+ * @brief getter function to retrive the victory set
+ * 
+ * @return list<pair<int,int>> 
+ */
 list<pair<int,int>> GameBoard::GetVictorySet()
 {
     return listVictorySet;
 }
 
+/**
+ * @brief this is used to mark a move played on the board by a player
+ * 
+ * @param pairCoordinates [in] position of the mark to be placed on the game board
+ * @param iMark           [in] mark used to well... mark
+ * @return true           if the game board has been marked successfully
+ * @return false          if the game board has not been marked
+ */
 bool GameBoard::MarkBoard(const pair<signed int, signed int>& pairCoordinates, const signed int& iMark)
 { 
     bool bRetVal = true;
@@ -250,11 +307,21 @@ bool GameBoard::MarkBoard(const pair<signed int, signed int>& pairCoordinates, c
     return bRetVal;
 }
 
+/**
+ * @brief getter function to retrive the game board 
+ * 
+ * @return vector<std::vector<int>> 
+ */
 vector<std::vector<int>> GameBoard::ShowGameBoard()
 {
     return vecGameBoard;
 }
 
+/**
+ * @brief getter to retrive the winning X or O
+ * 
+ * @return int 
+ */
 int GameBoard::GetWinningPlayable()
 {
     return iWinningPlayable;

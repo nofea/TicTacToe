@@ -5,6 +5,10 @@
 #include <string>
 #include "Commons.hpp"
 
+/**
+ * @brief holds elements of basic UI (CLI) 
+ * 
+ */
 class DrawGrid
 {
 private:
