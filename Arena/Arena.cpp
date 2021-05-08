@@ -15,10 +15,16 @@ Arena::~Arena()
 
 Arena::Arena(const Arena& obj)
 {
+    objCommons = obj.objCommons;
+    ObjPlayer_1 = obj.ObjPlayer_1;
+    ObjPlayer_2 = obj.ObjPlayer_2;
 }
 
 Arena& Arena::operator=(const Arena& obj)
 {
+    this->objCommons = obj.objCommons;
+    this->ObjPlayer_1 = obj.ObjPlayer_1;
+    this->ObjPlayer_2 = obj.ObjPlayer_2;
     return *this;
 }
 
@@ -35,7 +41,7 @@ bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, bool& bA
     int iWinningPlayable = -1;
 
     Log.LogMessage("Setting up Match...");
-    if(!MatchSetup(mapGameSettings, PF, Log))
+    if(!MatchSetup(mapGameSettings, PF))
     {
         return false;
     }
@@ -291,7 +297,7 @@ bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, bool& bA
     return bRetVal;
 }
 
-bool Arena::MatchSetup(map<Commons::GameSettings, int>& mapGameSettings, PlayerFactory& PF, Logger& Log)
+bool Arena::MatchSetup(map<Commons::GameSettings, int>& mapGameSettings, PlayerFactory& PF)
 {
     bool bRetVal = false;
 

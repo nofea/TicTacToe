@@ -17,7 +17,7 @@ CPPFLAGS ?= $(INC_FLAGS) -MMD -MP
 WINCPP = x86_64-w64-mingw32-g++
 
 # General compiler flags
-COMPILE_FLAGS = -std=c++17 -Wall -Wextra -g
+COMPILE_FLAGS = -std=c++17 -Wall -Wextra -g -Werror
 
 # Space-separated pkg-config libraries used by this project
 LIBS = -static-libgcc -static-libstdc++

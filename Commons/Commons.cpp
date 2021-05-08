@@ -13,10 +13,11 @@ Commons::~Commons()
 
 Commons::Commons(const Commons& obj)
 {
-
+    objCommons = obj.objCommons;
 }
 
 Commons& Commons::operator=(const Commons& obj)
 {
+    this->objCommons = obj.objCommons;
     return *this;
 }

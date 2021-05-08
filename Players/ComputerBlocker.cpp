@@ -8,12 +8,14 @@ ComputerBlocker::ComputerBlocker()
 }
 
 ComputerBlocker::ComputerBlocker(int& iPlayerChoice)
+: Player()
 {
     iPlayable = iPlayerChoice;
     objCommons = Commons::GetInstance();
 }
 
 ComputerBlocker::ComputerBlocker(const ComputerBlocker& obj)
+: Player()
 {
     iPlayable = obj.iPlayable;
     vecVictoryConditions = obj.vecVictoryConditions;
@@ -137,10 +139,9 @@ pair<int,int> ComputerBlocker::ComputeMove(const vector<vector<int>>& vecGameBoa
 
 bool ComputerBlocker::MakeVictoryConditionsList(int& iGameBoardSize)
 {
-    int iNumOfVictoryConditions = (iGameBoardSize * 2) + 2;
     list<pair<int,int>> listTempRow, listTempCol, listTempPDia, listTempSDia;
 
-    for(int j = 0, i = (iGameBoardSize - 1); j < iGameBoardSize, i >= 0; j++, i--)
+    for(int j = 0, i = (iGameBoardSize - 1); (j < iGameBoardSize), (i >= 0); j++, i--)
     {
         for (int k = 0; k < iGameBoardSize; k++)
         {
