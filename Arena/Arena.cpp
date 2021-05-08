@@ -4,15 +4,28 @@
 
 using namespace std;
 
+/**
+ * @brief Construct a new Arena:: Arena object
+ * 
+ */
 Arena::Arena()
 {
     objCommons = Commons::GetInstance();
 }
 
+/**
+ * @brief Destroy the Arena:: Arena object
+ * 
+ */
 Arena::~Arena()
 {
 }
 
+/**
+ * @brief Construct a new Arena:: Arena object
+ * 
+ * @param obj   [in] object reference of class Arena
+ */
 Arena::Arena(const Arena& obj)
 {
     objCommons = obj.objCommons;
@@ -20,6 +33,12 @@ Arena::Arena(const Arena& obj)
     ObjPlayer_2 = obj.ObjPlayer_2;
 }
 
+/**
+ * @brief Assignment operator
+ * 
+ * @param obj [in] object reference of class Arena
+ * @return Arena& 
+ */
 Arena& Arena::operator=(const Arena& obj)
 {
     this->objCommons = obj.objCommons;
@@ -28,6 +47,15 @@ Arena& Arena::operator=(const Arena& obj)
     return *this;
 }
 
+/**
+ * @brief This function contains the main game logic loop
+ * 
+ * @param mapGameSettings [in] values used to set up the game 
+ * @param bAutisticMode   [in] set true to suppress all user facing echos/couts, logging still works 
+ * @param Log             [in] logger object used to log events in the game
+ * @return true           if all goes well in the game loop
+ * @return false          if all is not well in the game loop
+ */
 bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, bool& bAutisticMode, Logger& Log)
 {
     bool bRetVal = false;
@@ -297,6 +325,14 @@ bool Arena::PlayMatch(map<Commons::GameSettings, int>& mapGameSettings, bool& bA
     return bRetVal;
 }
 
+/**
+ * @brief Used mapGameSettings to set up the game, accordingly
+ * 
+ * @param mapGameSettings [in] values used to set up the game
+ * @param PF              [in] object reference to the class PlayerFactory, used to instantiate players for the game 
+ * @return true           if all is ok
+ * @return false          if all is not ok
+ */
 bool Arena::MatchSetup(map<Commons::GameSettings, int>& mapGameSettings, PlayerFactory& PF)
 {
     bool bRetVal = false;

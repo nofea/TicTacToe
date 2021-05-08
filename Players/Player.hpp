@@ -5,6 +5,10 @@
 #include <vector>
 #include "Commons.hpp"
 
+/**
+ * @brief abstract class for the player
+ * 
+ */
 class Player
 {
 private:

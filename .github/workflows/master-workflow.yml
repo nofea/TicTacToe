@@ -12,10 +12,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
-    - name: Install dependency 
-      id: install_dependency
-      run: sudo apt install mingw-w64
+      # install the following dependencies
+      # 1. windows cross compiler
+    - name: Install Cross-Compiler 
+      id: install_cross_compiler 
+      run:  sudo apt install mingw-w64 
 
     - name: Check Out
       id: check_out
@@ -25,12 +26,26 @@ jobs:
       id: make
       run: make all
 
+    - name: Doxygen Action
+      id: doxygen_action
+      uses: mattnotmitt/doxygen-action@v1.3.1
+      with:
+        doxyfile-path: 'ttt_doxy'
+
+    - name: Easy Zip Files
+      uses: vimtor/action-zip@v1
+      with:
+          files: Documentation/ 
+          dest: Documentation.zip
+
     - name: Consolidate
       run: | 
       
         mkdir Release
         mv build_linux/tictactoe.out Release/tictactoe.out
         mv build_windows/tictactoe.exe Release/tictactoe.exe
+        mv Documentation.zip Release/Documentation.zip
+
 
     - name: Create Release
       id: create_release
@@ -64,3 +79,14 @@ jobs:
         asset_path: Release/tictactoe.exe
         asset_name: tictactoe.exe
         asset_content_type: application
+
+    - name: Upload Asset Documentation
+      id: upload-release-asset-documentation
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: Release/Documentation.zip
+        asset_name: Documentation.zip
+        asset_content_type: documentation

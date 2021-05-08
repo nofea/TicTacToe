@@ -12,6 +12,13 @@
 
 using namespace std;
 
+/**
+ * @brief This is the entry point to the TicTacToe game logic
+ * 
+ * @param argc  [in] Number of input arguments 
+ * @param argv  [in] array of input arguements
+ * @return int 
+ */
 int main(int argc,char* argv[])
 {   
     Logger Log;

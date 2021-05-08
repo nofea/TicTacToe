@@ -3,10 +3,19 @@
 
 using namespace std;
 
+/**
+ * @brief Construct a new Computer Blocker:: Computer Blocker object
+ * 
+ */
 ComputerBlocker::ComputerBlocker()
 {
 }
 
+/**
+ * @brief Construct a new Computer Blocker:: Computer Blocker object
+ * 
+ * @param iPlayerChoice 
+ */
 ComputerBlocker::ComputerBlocker(int& iPlayerChoice)
 : Player()
 {
@@ -14,6 +23,11 @@ ComputerBlocker::ComputerBlocker(int& iPlayerChoice)
     objCommons = Commons::GetInstance();
 }
 
+/**
+ * @brief Construct a new Computer Blocker:: Computer Blocker object
+ * 
+ * @param obj [in] object of class ComputerBlocker
+ */
 ComputerBlocker::ComputerBlocker(const ComputerBlocker& obj)
 : Player()
 {
@@ -23,6 +37,12 @@ ComputerBlocker::ComputerBlocker(const ComputerBlocker& obj)
     listMyPositions = obj.listMyPositions;
 }
 
+/**
+ * @brief Assignment operator for class ComputerBlocker
+ * 
+ * @param obj [in] object of class ComputerBlocker
+ * @return ComputerBlocker& 
+ */
 ComputerBlocker& ComputerBlocker::operator=(const ComputerBlocker& obj)
 {
     iPlayable = obj.iPlayable;
@@ -32,20 +52,40 @@ ComputerBlocker& ComputerBlocker::operator=(const ComputerBlocker& obj)
     return *this;
 }
 
+/**
+ * @brief Destroy the Computer Blocker:: Computer Blocker object
+ * 
+ */
 ComputerBlocker::~ComputerBlocker()
 {
 }
 
+/**
+ * @brief setter function to set playable as X or O
+ * 
+ * @param iPlayerChoice [in] choice of X or O made by the player
+ */
 void ComputerBlocker::SetPlayable(int iPlayerChoice)
 {
     iPlayable = iPlayerChoice;
 }
 
+/**
+ * @brief getter function to retrieve player select X or O
+ * 
+ * @return int 
+ */
 int ComputerBlocker::GetPlayable()
 {
     return(iPlayable);
 }
 
+/**
+ * @brief Computes move for the AI
+ * 
+ * @param vecGameBoard [in] game board matrix
+ * @return pair<int,int> 
+ */
 pair<int,int> ComputerBlocker::ComputeMove(const vector<vector<int>>& vecGameBoard)
 {
     pair<int,int> pairCoordinates(-1,-1);
@@ -137,6 +177,13 @@ pair<int,int> ComputerBlocker::ComputeMove(const vector<vector<int>>& vecGameBoa
     return pairCoordinates;
 }
 
+/**
+ * @brief creates and saves victory conditions for the game or TicTacToe
+ * 
+ * @param iGameBoardSize [in] size of the game board matrix
+ * @return true     if all is ok
+ * @return false    if all is not ok
+ */
 bool ComputerBlocker::MakeVictoryConditionsList(int& iGameBoardSize)
 {
     list<pair<int,int>> listTempRow, listTempCol, listTempPDia, listTempSDia;
@@ -163,6 +210,13 @@ bool ComputerBlocker::MakeVictoryConditionsList(int& iGameBoardSize)
     return true;
 }
 
+/**
+ * @brief this function is to make a list of mark enemy locations  
+ * 
+ * @param vecGameBoard [in] game board matrix
+ * @return true     if the list was updated
+ * @return false    if the list was not updated
+ */
 bool ComputerBlocker::UpdateEnemyPosition(const vector<vector<int>>& vecGameBoard)
 {
     int iBoardSize = vecGameBoard.size();
@@ -194,6 +248,13 @@ bool ComputerBlocker::UpdateEnemyPosition(const vector<vector<int>>& vecGameBoar
     return bRetVal;
 }
 
+/**
+ * @brief make a list of marked player locations
+ * 
+ * @param pairCoords [in] coordinates of the marked player location
+ * @return true 
+ * @return false 
+ */
 bool ComputerBlocker::RememberMyPosition(const pair<int,int>& pairCoords)
 {
     bool retValue = true;
@@ -206,6 +267,13 @@ bool ComputerBlocker::RememberMyPosition(const pair<int,int>& pairCoords)
     return retValue;
 }
 
+/**
+ * @brief check if this location of the game board has already been mark by player
+ * 
+ * @param pairCoords [in] coordinates of the location to be marked by the player
+ * @return true     if ok to mark
+ * @return false    if location already marked
+ */
 bool ComputerBlocker::AlreadyMadeThisMove(const pair<int,int>& pairCoords)
 {
     bool retValue = true;
@@ -220,7 +288,12 @@ bool ComputerBlocker::AlreadyMadeThisMove(const pair<int,int>& pairCoords)
     return retValue;
 }
 
-//optimize this
+/**
+ * @brief determine unmarked locations on the game board
+ * 
+ * @param vecGameBoard  [in] game board matrix
+ * @return vector<pair<int,int>> 
+ */
 vector<pair<int,int>> ComputerBlocker::GetEmptySpaces(const vector<vector<int>>& vecGameBoard)
 {
     vector<pair<int,int>> vecEmptySpaces;

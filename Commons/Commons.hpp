@@ -10,6 +10,11 @@
 #define ZERO 0
 #define NUMBEROFRETRIES 3
 
+/**
+ * @brief holds elements common to all classes in TicTacToe.
+ * It is a singleton class
+ * 
+ */
 class Commons
 {
 private:
@@ -17,6 +22,10 @@ private:
 
 public:
 
+    /**
+     * @brief holds types of players available in the game
+     * 
+     */
     enum PlayerType
     {
         PlayerType_None,
@@ -25,6 +34,10 @@ public:
         PlayerType_Max
     };
 
+    /**
+     * @brief Player selection for TicTacToe
+     * 
+     */
     enum Playable
     {
         Playable_None,
@@ -32,6 +45,10 @@ public:
         Playable_O
     };
 
+    /**
+     * @brief holds properties of a mathematical matrix
+     * 
+     */
     enum MatrixProperties
     {
         MatrixProperties_None,
@@ -41,6 +58,10 @@ public:
         MatrixProperties_SecondaryDiagonal
     };
 
+    /**
+     * @brief holds game options
+     * 
+     */
     enum GameSettings
     {
         GameSettings_None,
@@ -50,6 +71,10 @@ public:
         GameSettings_Max       
     };
 
+    /**
+     * @brief holds one of the game options --> Game Mode
+     * 
+     */
     enum GameMode
     {
         GameMode_None,
@@ -60,6 +85,10 @@ public:
         
     };
 
+    /**
+     * @brief holds one of the game option --> Computer Match Speed 
+     * 
+     */
     enum GameSettingsComputerMatchSpeed
     {
         GameSettingsMatchSpeed_NONE,

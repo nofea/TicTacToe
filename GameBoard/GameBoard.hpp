@@ -6,7 +6,10 @@
 #include <list>
 #include "Commons.hpp"
 
-
+/**
+ * @brief hold properties of the TicTacToe game board
+ * 
+ */
 class GameBoard
 {
 private:
@@ -18,7 +21,7 @@ private:
 
 private:
     GameBoard();
-    bool SaveVictorySet(Commons::MatrixProperties Property, int& iIndex);
+    bool SaveVictorySet(const Commons::MatrixProperties& Property, const int& iIndex);
 
 public:   
     GameBoard(int iSize);
