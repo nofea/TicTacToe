@@ -17,7 +17,7 @@ int main(int argc,char* argv[])
     Logger Log;
     Commons* objCommons = Commons::GetInstance();
     Arena A;
-    int iGameMode = 0, iGameSpeed = 0;
+    int iGameMode = 0;
     bool bGameModeSelected = false;
     map<Commons::GameSettings, int> mapGameSettings;
     bool bAutisticMode = false;
@@ -37,7 +37,6 @@ int main(int argc,char* argv[])
             return 0;
         }
 
-        iGameSpeed = stoi(string(argv[2])); // unused
         mapGameSettings.insert(pair<Commons::GameSettings,int>(objCommons->GameSettings_PlayerType, stoi(string(argv[3]))));
            
         bGameModeSelected = true;

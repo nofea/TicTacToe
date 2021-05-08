@@ -14,11 +14,12 @@ DrawGrid::~DrawGrid()
 
 DrawGrid::DrawGrid(const DrawGrid& obj)
 {
-
+    ObjCommons = obj.ObjCommons;
 }
 
 DrawGrid& DrawGrid::operator=(const DrawGrid& obj)
 {
+    this->ObjCommons = obj.ObjCommons;
     return *this;
 }
 

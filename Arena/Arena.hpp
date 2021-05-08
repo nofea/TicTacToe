@@ -22,5 +22,5 @@ public:
     bool PlayMatch(std::map<Commons::GameSettings, int>& mapGameSettings, bool& bAutisticMode, Logger& Log);
 
 private:
-    bool MatchSetup(std::map<Commons::GameSettings, int>& mapGameSettings, PlayerFactory& PF, Logger& Log);
+    bool MatchSetup(std::map<Commons::GameSettings, int>& mapGameSettings, PlayerFactory& PF);
 };
