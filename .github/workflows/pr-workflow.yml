@@ -30,14 +30,14 @@ jobs:
         uses: actions/upload-artifact@v2
         with: 
           name: Linux_Binary
-          path: build_linux/tictactoe.out
+          path: bin/build_linux/tictactoe.out
 
       - name: Upload Windows EXE
         id: upload_windows_exe
         uses: actions/upload-artifact@v2
         with:
           name: Windows_EXE
-          path: build_windows/tictactoe.exe
+          path: bin/build_windows/tictactoe.exe
 
   test_on_ubuntu:
 

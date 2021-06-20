@@ -42,8 +42,8 @@ jobs:
       run: | 
       
         mkdir Release
-        mv build_linux/tictactoe.out Release/tictactoe.out
-        mv build_windows/tictactoe.exe Release/tictactoe.exe
+        mv bin/build_linux/tictactoe.out Release/tictactoe.out
+        mv bin/build_windows/tictactoe.exe Release/tictactoe.exe
         mv Documentation.zip Release/Documentation.zip
 
 

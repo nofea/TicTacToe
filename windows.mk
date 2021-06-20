@@ -1,6 +1,6 @@
 TARGET_EXEC_WINDOWS ?= tictactoe.exe
 
-BUILD_DIR_WINDOWS ?= ./build_windows
+BUILD_DIR_WINDOWS ?= ./bin/build_windows
 SRC_DIRS ?= $(shell pwd)
 
 SRCS := $(shell find $(SRC_DIRS) -type f -name "*.cpp")
@@ -34,6 +34,8 @@ $(BUILD_DIR_WINDOWS)/%.s.o: %.s
 
 $(BUILD_DIR_WINDOWS)/$(TARGET_EXEC_WINDOWS): $(OBJS_WINDOWS)
 	$(WINCPP) $(OBJS_WINDOWS) -o $@ $(LDFLAGS) $(LIBS)
+
+@echo Windows build completed successfully!
 
 -include $(DEPS)
 
