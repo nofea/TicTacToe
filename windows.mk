@@ -1,6 +1,6 @@
 TARGET_EXEC_WINDOWS ?= tictactoe.exe
 
-BUILD_DIR_WINDOWS ?= ./build_windows
+BUILD_DIR_WINDOWS ?= ./bin/build_windows
 SRC_DIRS ?= $(shell pwd)
 
 SRCS := $(shell find $(SRC_DIRS) -type f -name "*.cpp")
@@ -11,6 +11,7 @@ INC_DIRS := $(shell find $(SRC_DIRS) -type d)
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 CPPFLAGS ?= $(INC_FLAGS) -MMD -MP
+OPTIMIZATION := -O3
 
 
 # Windows Cross Compiler
@@ -26,7 +27,7 @@ LIBS = -static-libgcc -static-libstdc++
 # windows
 $(BUILD_DIR_WINDOWS)/%.cpp.o: %.cpp
 	$(MKDIR_P) $(dir $@)
-	$(WINCPP) $(COMPILE_FLAGS) $(LIBS) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+	$(WINCPP) $(COMPILE_FLAGS) $(LIBS) $(CPPFLAGS) $(OPTIMIZATION) $(CXXFLAGS) -c $< -o $@
 
 $(BUILD_DIR_WINDOWS)/%.s.o: %.s
 	$(MKDIR_P) $(dir $@)
@@ -34,6 +35,8 @@ $(BUILD_DIR_WINDOWS)/%.s.o: %.s
 
 $(BUILD_DIR_WINDOWS)/$(TARGET_EXEC_WINDOWS): $(OBJS_WINDOWS)
 	$(WINCPP) $(OBJS_WINDOWS) -o $@ $(LDFLAGS) $(LIBS)
+
+	@echo Windows build completed successfully!
 
 -include $(DEPS)
 

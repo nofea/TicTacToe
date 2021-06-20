@@ -26,25 +26,38 @@ jobs:
       id: make
       run: make all
 
+    - name: Lint
+      id: lint
+      run: make lint
+
     - name: Doxygen Action
       id: doxygen_action
       uses: mattnotmitt/doxygen-action@v1.3.1
       with:
         doxyfile-path: 'ttt_doxy'
 
-    - name: Easy Zip Files
+    - name: Easy Zip Files Documentation
+      id: easy_zip_files_documentation
       uses: vimtor/action-zip@v1
       with:
           files: Documentation/ 
           dest: Documentation.zip
 
+    - name: Easy Zip Files Lint
+      id: easy_zip_files_lint
+      uses: vimtor/action-zip@v1
+      with:
+          files: lintresult/ 
+          dest: lintresult.zip
+
     - name: Consolidate
       run: | 
       
         mkdir Release
-        mv build_linux/tictactoe.out Release/tictactoe.out
-        mv build_windows/tictactoe.exe Release/tictactoe.exe
+        mv bin/build_linux/tictactoe.out Release/tictactoe.out
+        mv bin/build_windows/tictactoe.exe Release/tictactoe.exe
         mv Documentation.zip Release/Documentation.zip
+        mv lintresult.zip Release/lintresult.zip
 
 
     - name: Create Release
@@ -89,4 +102,15 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: Release/Documentation.zip
         asset_name: Documentation.zip
+        asset_content_type: documentation
+
+    - name: Upload Asset Lint Results
+      id: upload-release-asset-lint
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: Release/lintresult.zip
+        asset_name: lintresult.zip
         asset_content_type: documentation
