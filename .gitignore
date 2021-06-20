@@ -1,8 +1,6 @@
 # ignore the following for git repos
 
-.vs/
 .vscode/
 build_linux/
 build_windows/
 Documentation/
-lintresults/
