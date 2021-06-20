@@ -35,4 +35,4 @@ cleandoc:
 	$(RM) -r $(DOXYGEN_DIR)
 
 help:
-	@echo use "make [all|linux|windows|lint|doc|clean|help]" 
+	@echo use "make [all|linux|windows|lint|doc|clean|cleanlint|cleandoc|help]" 
