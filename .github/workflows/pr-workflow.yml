@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
+      # install the following dependencies
+      # 1. windows cross compiler
       - name: Install dependency 
         id: install_dependency
         run: sudo apt install mingw-w64
@@ -24,6 +25,10 @@ jobs:
       - name: Make
         id: make
         run: make all
+
+      - name: Lint
+        id: lint
+        run: make lint
 
       - name: Upload Linux Binary
         id: upload_linux_binary
