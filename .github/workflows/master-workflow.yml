@@ -16,7 +16,10 @@ jobs:
       # 1. windows cross compiler
     - name: Install Cross-Compiler 
       id: install_cross_compiler 
-      run:  sudo apt install mingw-w64 
+      run: |
+
+        sudo apt install mingw-w64
+        sudo apt-get install cppcheck 
 
     - name: Check Out
       id: check_out

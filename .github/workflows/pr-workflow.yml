@@ -14,9 +14,13 @@ jobs:
     steps:
       # install the following dependencies
       # 1. windows cross compiler
+      # 2. cppcheck
       - name: Install dependency 
         id: install_dependency
-        run: sudo apt install mingw-w64
+        run: |
+
+          sudo apt install mingw-w64
+          sudo apt-get install cppcheck
 
       - name: Check Out
         id: check_out
