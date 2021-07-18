@@ -12,10 +12,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # install the following dependencies
+      # 1. windows cross compiler
+      # 2. cppcheck
+      - name: Install dependencies
+        id: install_dependencies
+        run: |
 
-      - name: Install dependency 
-        id: install_dependency
-        run: sudo apt install mingw-w64
+          sudo apt install mingw-w64
+          sudo apt-get install cppcheck
 
       - name: Check Out
         id: check_out
@@ -24,6 +29,10 @@ jobs:
       - name: Make
         id: make
         run: make all
+
+      - name: Lint
+        id: lint
+        run: make lint
 
       - name: Upload Linux Binary
         id: upload_linux_binary
