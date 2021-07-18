@@ -14,8 +14,8 @@ jobs:
     steps:
       # install the following dependencies
       # 1. windows cross compiler
-    - name: Install Cross-Compiler 
-      id: install_cross_compiler 
+    - name: Install dependencies
+      id: install_dependencies 
       run: |
 
         sudo apt install mingw-w64
