@@ -50,8 +50,8 @@ jobs:
       id: easy_zip_files_lint
       uses: vimtor/action-zip@v1
       with:
-          files: lintresult/ 
-          dest: lintresult.zip
+          files: lintresults/ 
+          dest: lintresults.zip
 
     - name: Consolidate
       run: | 
@@ -60,7 +60,7 @@ jobs:
         mv bin/build_linux/tictactoe.out Release/tictactoe.out
         mv bin/build_windows/tictactoe.exe Release/tictactoe.exe
         mv Documentation.zip Release/Documentation.zip
-        mv lintresult.zip Release/lintresult.zip
+        mv lintresults.zip Release/lintresults.zip
 
 
     - name: Create Release
