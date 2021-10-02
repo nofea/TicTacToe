@@ -4,22 +4,26 @@
 #include <iostream>
 #include <fstream>
 
-using namespace std;
-
+/**
+ * @brief holds elements used for logging purposes
+ * 
+ */
 class Logger
 {
 private:
-    ofstream log;
+    std::ofstream log;
 public:
     Logger();
     ~Logger();
 
 public:
-    bool OpenLoggerFile(string sFilePathName);
-    bool LogMessage(string sMessage);
-    bool LogMessage(string sMessage, signed int& iTurnCount);
-    bool LogError(string sError, signed int& iTurnCount);
+    bool OpenLoggerFile(std::string sFilePathName);
+    void LogMessage(const std::string& sMessage);
+    void LogMessage(const std::string& sMessage, const signed int& iTurnCount);
+    void LogError(const std::string& sError);
+    void LogError(const std::string& sError, const signed int& iTurnCount);
     bool CloseLoggerFile();
+    std::string GetCurrentDateTime();
 };
 
 #endif

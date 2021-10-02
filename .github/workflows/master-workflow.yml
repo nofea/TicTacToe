@@ -1,0 +1,119 @@
+name: Master Workflow
+
+on:
+  push:
+    branches: [ master ]
+
+
+
+jobs:
+  create_release:
+  
+    runs-on: ubuntu-latest
+
+    steps:
+      # install the following dependencies
+      # 1. windows cross compiler
+    - name: Install dependencies
+      id: install_dependencies 
+      run: |
+
+        sudo apt install mingw-w64
+        sudo apt-get install cppcheck 
+
+    - name: Check Out
+      id: check_out
+      uses: actions/checkout@v2
+    
+    - name: Make
+      id: make
+      run: make all
+
+    - name: Lint
+      id: lint
+      run: make lint
+
+    - name: Doxygen Action
+      id: doxygen_action
+      uses: mattnotmitt/doxygen-action@v1.3.1
+      with:
+        doxyfile-path: 'ttt_doxy'
+
+    - name: Easy Zip Files Documentation
+      id: easy_zip_files_documentation
+      uses: vimtor/action-zip@v1
+      with:
+          files: Documentation/ 
+          dest: Documentation.zip
+
+    - name: Easy Zip Files Lint
+      id: easy_zip_files_lint
+      uses: vimtor/action-zip@v1
+      with:
+          files: lintresults/ 
+          dest: lintresults.zip
+
+    - name: Consolidate
+      run: | 
+      
+        mkdir Release
+        mv bin/build_linux/tictactoe.out Release/tictactoe.out
+        mv bin/build_windows/tictactoe.exe Release/tictactoe.exe
+        mv Documentation.zip Release/Documentation.zip
+        mv lintresults.zip Release/lintresults.zip
+
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: true
+        prerelease: false
+
+    - name: Upload Asset Linux
+      id: upload-release-asset-linux
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} 
+        asset_path: Release/tictactoe.out
+        asset_name: tictactoe.out
+        asset_content_type: application
+    
+    - name: Upload Asset Windows
+      id: upload-release-asset-windows
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: Release/tictactoe.exe
+        asset_name: tictactoe.exe
+        asset_content_type: application
+
+    - name: Upload Asset Documentation
+      id: upload-release-asset-documentation
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: Release/Documentation.zip
+        asset_name: Documentation.zip
+        asset_content_type: documentation
+
+    - name: Upload Asset Lint Results
+      id: upload-release-asset-lint
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: Release/lintresults.zip
+        asset_name: lintresults.zip
+        asset_content_type: documentation

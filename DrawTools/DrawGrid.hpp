@@ -3,11 +3,16 @@
 
 #include <vector>
 #include <string>
+#include "Commons.hpp"
 
+/**
+ * @brief holds elements of basic UI (CLI) 
+ * 
+ */
 class DrawGrid
 {
 private:
-    /* data */
+    Commons* ObjCommons;
 public:
     DrawGrid();
     ~DrawGrid();

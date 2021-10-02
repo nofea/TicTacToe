@@ -1,9 +1,15 @@
 #ifndef __HUMAN_HPP__
 #define __HUMAN_HPP__
 
+#include <map>
+#include <vector>
 #include "Player.hpp"
 
-class Human : Player
+/**
+ * @brief holds the human player instance
+ * 
+ */
+class Human : public Player
 {
 private:
     int iPlayable;
@@ -17,6 +23,8 @@ public:
 public:
     void SetPlayable(int iPlayerChoice);
     int GetPlayable();
+    std::pair<int,int> ComputeMove(const std::vector<std::vector<int>>& vecGameBoard);
+    bool RememberMyPosition(const std::pair<int,int>& pairCoords);
 };
 
 #endif

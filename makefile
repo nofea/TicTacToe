@@ -1,42 +1,38 @@
-TARGET_EXEC ?= tictactoe.out
+BUILD_DIR := ./bin
+BUILD_DIR_LINUX ?= $(BUILD_DIR)/build_linux
+BUILD_DIR_WINDOWS ?= $(BUILD_DIR)/build_windows
 
-BUILD_DIR ?= ./build
-SRC_DIRS ?= $(shell pwd)
+DOXYGEN := doxygen
+DOXYGEN_DIR := Documentation
 
-SRCS := $(shell find $(SRC_DIRS) -type f -name "*.cpp")
-OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
-DEPS := $(OBJS:.o=.d)
+LINT_DIR := lintresults
 
-INC_DIRS := $(shell find $(SRC_DIRS) -type d)
-INC_FLAGS := $(addprefix -I,$(INC_DIRS))
+all: 
+	$(MAKE) -f linux.mk
+	$(MAKE) -f windows.mk
 
-CPPFLAGS ?= $(INC_FLAGS) -MMD -MP
+linux:
+	$(MAKE) -f linux.mk
 
-# General compiler flags
-COMPILE_FLAGS = -std=c++11 -Wall -Wextra -g
+windows:
+	$(MAKE) -f windows.mk
 
-# Space-separated pkg-config libraries used by this project
-LIBS = -lstdc++
+lint:
+	$(MAKE) -f lint.mk
 
-# c++ source
-$(BUILD_DIR)/%.cpp.o: %.cpp
-	$(MKDIR_P) $(dir $@)
-	$(CXX) $(COMPILE_FLAGS) $(LIBS) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
-
-# assembly
-$(BUILD_DIR)/%.s.o: %.s
-	$(MKDIR_P) $(dir $@)
-	$(AS) $(ASFLAGS) -c $< -o $@ $(LIBS)
-
-$(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
-	$(CC) $(OBJS) -o $@ $(LDFLAGS) $(LIBS)
-
-
+doc:
+	$(DOXYGEN) ttt_doxy
+	
 .PHONY: clean
 
 clean:
 	$(RM) -r $(BUILD_DIR)
 
--include $(DEPS)
+cleanlint:
+	$(RM) -r $(LINT_DIR)
 
-MKDIR_P ?= mkdir -p
+cleandoc:
+	$(RM) -r $(DOXYGEN_DIR)
+
+help:
+	@echo use "make [all|linux|windows|lint|doc|clean|cleanlint|cleandoc|help]" 

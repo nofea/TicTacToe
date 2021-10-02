@@ -6,7 +6,10 @@
 #include <list>
 #include "Commons.hpp"
 
-
+/**
+ * @brief hold properties of the TicTacToe game board
+ * 
+ */
 class GameBoard
 {
 private:
@@ -14,10 +17,11 @@ private:
     std::vector<std::vector<int>> vecGameBoard;
     std::list<std::pair<int,int>> listVictorySet;
     int iWinningPlayable;
+    Commons* objCommons;
 
 private:
     GameBoard();
-    bool SaveVictorySet(MatrixProperties Property, int& iIndex);
+    bool SaveVictorySet(const Commons::MatrixProperties& Property, const int& iIndex);
 
 public:   
     GameBoard(int iSize);
@@ -29,6 +33,7 @@ public:
     bool InitGameBoard();
     bool IsEndOfGame();
     std::list<std::pair<int,int>> GetVictorySet();
+    int GetWinningPlayable();
     bool MarkBoard(const std::pair<signed int, signed int>& pairCoordinates, const signed int& iMark);
     std::vector<std::vector<int>> ShowGameBoard();
 };

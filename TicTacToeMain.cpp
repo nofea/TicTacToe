@@ -1,134 +1,141 @@
 #include <iostream>
 #include <string>
-#include <algorithm>
+#include <map>
 #include "Commons.hpp"
 #include "GameBoard.hpp"
 #include "Logger.hpp"
 #include "ComputerBlocker.hpp"
 #include "Human.hpp"
 #include "DrawGrid.hpp"
+#include "Arena.hpp"
 
 
 using namespace std;
 
-int main()
+/**
+ * @brief This is the entry point to the TicTacToe game logic
+ * 
+ * @param argc  [in] Number of input arguments 
+ * @param argv  [in] array of input arguements
+ * @return int 
+ */
+int main(int argc,char* argv[])
 {   
-    string sPlayable(""), sGameBoard("");
-    Human H1;
-    ComputerBlocker CB;
     Logger Log;
-    DrawGrid DG;
-    signed int iXCoord = 0, iYCoord = 0, iMoveCounter = 0;
-    bool bMarked = false;
-    pair<int, int> pairCoords;
+    Commons* objCommons = Commons::GetInstance();
+    Arena A;
+    int iGameMode = 0;
+    bool bGameModeSelected = false;
+    map<Commons::GameSettings, int> mapGameSettings;
+    bool bAutisticMode = false;
+    bool bPlayableSelected = false;
+    string sPlayable("");
+
+    if(argc > 1)
+    {
+        bAutisticMode = true;
+        iGameMode = stoi(string(argv[1]));
+
+        if(argc < 4) // 1 + 3 for game mode, game speed and selection of X or O
+        {
+            cout << "Error! of arguments" << endl;
+            Log.LogError("Error! of arguments");
+            cout << "Exiting Game..." << endl;
+            return 0;
+        }
+
+        mapGameSettings.insert(pair<Commons::GameSettings,int>(objCommons->GameSettings_PlayerType, stoi(string(argv[3]))));
+           
+        bGameModeSelected = true;
+        bPlayableSelected = true;
+    }
 
     try
     {
-        Log.OpenLoggerFile(LOGGERPATHNAME);
+        if(!Log.OpenLoggerFile(LOGGERPATHNAME))
+        {
+            cout << "Error! Failed to Initialize Logger!" << endl;
+            Log.LogError("Error! Failed to Initialize Logger!");
+            cout << "Exiting Game..." << endl;
+            return 0;
+        }
     }
     catch(const exception& e)
     {
         cerr << e.what() << endl;
+        Log.LogError(e.what());
+        cout << "Exiting Game..." << endl;
+        return 0;
+    }
+
+    cout << "Welcome to a game of Tic Tac Toe!!!" << endl << endl << endl;
+
+    while(!bGameModeSelected)
+    {
+        cout << "Choose Game Mode" << endl << endl;
+
+        cout << "(1) Versus Computer" << endl;
+        cout << "(2) Computer Versus Computer" << endl;
+
+        cin >> iGameMode;
+
+        if(iGameMode > objCommons->GameMode_ComputerVComputer || 
+            iGameMode < objCommons->GameMode_HumanVComputer)
+        {
+            cout << "Pick (1) or (2) Doofus!!!" << endl;
+        }
+        else
+        {
+            bGameModeSelected = true;
+        } 
     }
     
-    cout << "Welcome to a game of Tic Tac Toe" << endl;
+    mapGameSettings.insert(pair<Commons::GameSettings,int>(objCommons->GameSettings_GameMode, iGameMode));
+    
+    // implementation of game speed pending
+    mapGameSettings.insert(pair<Commons::GameSettings,int>(objCommons->GameSettings_ComputerMatchSpeed, objCommons->GameSettingsMatchSpeed_NORMAL));
 
-    while (1)
+    
+    Log.LogMessage("Game Mode: " + to_string(mapGameSettings.at(objCommons->GameSettings_GameMode)));
+    Log.LogMessage("Comuter Match Speed: " + to_string(mapGameSettings.at(objCommons->GameSettings_ComputerMatchSpeed)));
+
+    while(!bPlayableSelected)
     {
         cout << "Do you want to be X's or O's?" << endl;
         cin >> sPlayable;
 
-        transform(sPlayable.begin(), sPlayable.end(), sPlayable.begin(), ::toupper);
-
-        if(sPlayable == "X")
+        try
         {
-            H1.SetPlayable(Playable_X);
-            CB.SetPlayable(Playable_O);
-            break;
-        }
-        else if(sPlayable == "O")
-        {
-            H1.SetPlayable(Playable_O);
-            CB.SetPlayable(Playable_X);
-            break;
-        }
-        else
-        {
-            cout << "Bruh, pick X or O..." << endl;
-            Log.LogError("The Human is being daft!!!", iMoveCounter);
-        }
-    }
-    
-    Log.LogMessage("The Human chose: "+ to_string(H1.GetPlayable()), iMoveCounter);
-    Log.LogMessage("The Computer was given: "+ to_string(CB.GetPlayable()), iMoveCounter);
-
-    GameBoard GB(DEFAULTGAMEBOARDSIZE);
-    Log.LogMessage("Game Board Initialized with size: "+ to_string(DEFAULTGAMEBOARDSIZE), iMoveCounter);
-    
-    cout << "X goes first" << endl;  
-
-    if(CB.GetPlayable() == Playable_X)
-    {
-        pairCoords = CB.ComputeMove(GB.ShowGameBoard());
-        GB.MarkBoard(pairCoords, CB.GetPlayable());
-        Log.LogMessage("The Computer played: "+ to_string(pairCoords.first)+ "," + to_string(pairCoords.second), iMoveCounter);
-
-    }
-    
-
-    // and so let the games begin...
-    while(!GB.IsEndOfGame())
-    {
-        bMarked = false;
-        iMoveCounter++;
-        
-        sGameBoard = DG.DrawGameBoard(GB.ShowGameBoard());
-        cout << "The Game Board:" << endl;
-        cout << sGameBoard << endl;
-        Log.LogMessage("\n"+sGameBoard, iMoveCounter);   
-        
-        cout << "Key in x y Coordinates" << endl;
-
-        while(!bMarked)
-        {
-            cin >> iXCoord >> iYCoord;
-
-            if(iXCoord < DEFAULTGAMEBOARDSIZE && iYCoord < DEFAULTGAMEBOARDSIZE)
+            transform(sPlayable.begin(), sPlayable.end(), sPlayable.begin(), ::toupper);
+            if(sPlayable == "X")
             {
-                Log.LogMessage("The Human keyed in: "+ to_string(iXCoord) +" and "+ to_string(iYCoord), iMoveCounter);
-
-                if(!GB.MarkBoard(pair<signed int, signed int>(iXCoord, iYCoord), H1.GetPlayable()))
-                {
-                    Log.LogError("The Human keyed in: "+ to_string(iXCoord) +" and "+ to_string(iYCoord), iMoveCounter);
-                    cout << "This coordinate is already marked, pick a different position..." << endl; 
-                }
-                else
-                {
-                    bMarked = true;
-                }                   
+                mapGameSettings.insert(pair<Commons::GameSettings,Commons::Playable>(objCommons->GameSettings_PlayerType, objCommons->Playable_X));
+                bPlayableSelected = true;
+            }
+            else if(sPlayable == "O")
+            {
+                mapGameSettings.insert(pair<Commons::GameSettings,Commons::Playable>(objCommons->GameSettings_PlayerType, objCommons->Playable_O));
+                bPlayableSelected = true;
             }
             else
             {
-                Log.LogError("The Human keyed in: "+ to_string(iXCoord) +" and "+ to_string(iYCoord), iMoveCounter);
-                cout << "The x and y coordinates have to be between and including 0 and "+ to_string(DEFAULTGAMEBOARDSIZE - 1) << endl;
-                cout << "Try again..." << endl; 
+                cout << "Bruh, pick X or O..." << endl;
             }
         }
-
-        pairCoords = CB.ComputeMove(GB.ShowGameBoard());
-
-        if(pairCoords != pair<int, int>(-1, -1))
+        catch(const std::exception& e)
         {
-             GB.MarkBoard(pairCoords, CB.GetPlayable());
-            Log.LogMessage("The Computer played: "+ to_string(pairCoords.first)+ "," + to_string(pairCoords.second), iMoveCounter);
+            cerr << e.what() << endl;
+            Log.LogError(e.what());
+            cout << "Exiting Game..." << endl;
+            return 0;
         }
     }
-    
-    cout << "Game Over!" << endl;
-    sGameBoard = DG.DrawGameBoard(GB.ShowGameBoard());
-    cout << "The Game Board:" << endl;
-    cout << sGameBoard << endl;
-    Log.LogMessage("\n"+sGameBoard, iMoveCounter); 
+
+    if(!A.PlayMatch(mapGameSettings, bAutisticMode, Log))
+    {
+        cout << "Error! Something has gone wrong in the Arena" << endl;
+    }
+
     Log.CloseLoggerFile();
     return 0;
 }

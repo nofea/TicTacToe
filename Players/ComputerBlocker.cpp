@@ -3,16 +3,33 @@
 
 using namespace std;
 
+/**
+ * @brief Construct a new Computer Blocker:: Computer Blocker object
+ * 
+ */
 ComputerBlocker::ComputerBlocker()
 {
 }
 
+/**
+ * @brief Construct a new Computer Blocker:: Computer Blocker object
+ * 
+ * @param iPlayerChoice 
+ */
 ComputerBlocker::ComputerBlocker(int& iPlayerChoice)
+: Player()
 {
     iPlayable = iPlayerChoice;
+    objCommons = Commons::GetInstance();
 }
 
+/**
+ * @brief Construct a new Computer Blocker:: Computer Blocker object
+ * 
+ * @param obj [in] object of class ComputerBlocker
+ */
 ComputerBlocker::ComputerBlocker(const ComputerBlocker& obj)
+: Player()
 {
     iPlayable = obj.iPlayable;
     vecVictoryConditions = obj.vecVictoryConditions;
@@ -20,6 +37,12 @@ ComputerBlocker::ComputerBlocker(const ComputerBlocker& obj)
     listMyPositions = obj.listMyPositions;
 }
 
+/**
+ * @brief Assignment operator for class ComputerBlocker
+ * 
+ * @param obj [in] object of class ComputerBlocker
+ * @return ComputerBlocker& 
+ */
 ComputerBlocker& ComputerBlocker::operator=(const ComputerBlocker& obj)
 {
     iPlayable = obj.iPlayable;
@@ -29,20 +52,40 @@ ComputerBlocker& ComputerBlocker::operator=(const ComputerBlocker& obj)
     return *this;
 }
 
+/**
+ * @brief Destroy the Computer Blocker:: Computer Blocker object
+ * 
+ */
 ComputerBlocker::~ComputerBlocker()
 {
 }
 
+/**
+ * @brief setter function to set playable as X or O
+ * 
+ * @param iPlayerChoice [in] choice of X or O made by the player
+ */
 void ComputerBlocker::SetPlayable(int iPlayerChoice)
 {
     iPlayable = iPlayerChoice;
 }
 
+/**
+ * @brief getter function to retrieve player select X or O
+ * 
+ * @return int 
+ */
 int ComputerBlocker::GetPlayable()
 {
     return(iPlayable);
 }
 
+/**
+ * @brief Computes move for the AI
+ * 
+ * @param vecGameBoard [in] game board matrix
+ * @return pair<int,int> 
+ */
 pair<int,int> ComputerBlocker::ComputeMove(const vector<vector<int>>& vecGameBoard)
 {
     pair<int,int> pairCoordinates(-1,-1);
@@ -51,6 +94,7 @@ pair<int,int> ComputerBlocker::ComputeMove(const vector<vector<int>>& vecGameBoa
     vector<int>::iterator itMax;
     int iBoardSize = vecGameBoard.size();
     bool bFound = false;
+    vector<pair<int,int>> vecEmptySpaces;
 
     if(vecVictoryConditions.empty())
     {
@@ -61,7 +105,7 @@ pair<int,int> ComputerBlocker::ComputeMove(const vector<vector<int>>& vecGameBoa
     if(!UpdateEnemyPosition(vecGameBoard))
     {
         // The first move
-        iCoordinate = rand() % iBoardSize + 1;
+        iCoordinate = rand() % iBoardSize;
         pairCoordinates.first = iCoordinate;
         pairCoordinates.second = iCoordinate;
     }
@@ -88,10 +132,16 @@ pair<int,int> ComputerBlocker::ComputeMove(const vector<vector<int>>& vecGameBoa
                 vecPredictionCounter.erase(itMax);
             }
             
+            if(vecPredictionCounter.size() == 0)
+            {
+                //concede
+                break;
+            }
+
             itMax = max_element(vecPredictionCounter.begin(), vecPredictionCounter.end());  
             iVictoryCondition = itMax - vecPredictionCounter.begin();
 
-            if(vecPredictionCounter.at(iVictoryCondition) == iBoardSize)
+            if(vecPredictionCounter.at(iVictoryCondition) == iBoardSize) // this line is causing problems!!!
             {
                 // concede
                 break;
@@ -111,19 +161,34 @@ pair<int,int> ComputerBlocker::ComputeMove(const vector<vector<int>>& vecGameBoa
                     }
                 }
             }
+        }
+        
+        if(!bFound)
+        {
+            vecEmptySpaces = GetEmptySpaces(vecGameBoard);
+
+            if(!vecEmptySpaces.empty())
+            {
+                iCoordinate = rand() % vecEmptySpaces.size();
+                pairCoordinates = vecEmptySpaces.at(iCoordinate);
+            }
         }     
     }
-    
-    RememberMyPosition(pairCoordinates);
     return pairCoordinates;
 }
 
+/**
+ * @brief creates and saves victory conditions for the game or TicTacToe
+ * 
+ * @param iGameBoardSize [in] size of the game board matrix
+ * @return true     if all is ok
+ * @return false    if all is not ok
+ */
 bool ComputerBlocker::MakeVictoryConditionsList(int& iGameBoardSize)
 {
-    int iNumOfVictoryConditions = (iGameBoardSize * 2) + 2;
     list<pair<int,int>> listTempRow, listTempCol, listTempPDia, listTempSDia;
 
-    for(int j = 0, i = (iGameBoardSize - 1); j < iGameBoardSize, i >= 0; j++, i--)
+    for(int j = 0, i = (iGameBoardSize - 1); (j < iGameBoardSize), (i >= 0); j++, i--)
     {
         for (int k = 0; k < iGameBoardSize; k++)
         {
@@ -145,6 +210,13 @@ bool ComputerBlocker::MakeVictoryConditionsList(int& iGameBoardSize)
     return true;
 }
 
+/**
+ * @brief this function is to make a list of mark enemy locations  
+ * 
+ * @param vecGameBoard [in] game board matrix
+ * @return true     if the list was updated
+ * @return false    if the list was not updated
+ */
 bool ComputerBlocker::UpdateEnemyPosition(const vector<vector<int>>& vecGameBoard)
 {
     int iBoardSize = vecGameBoard.size();
@@ -176,6 +248,13 @@ bool ComputerBlocker::UpdateEnemyPosition(const vector<vector<int>>& vecGameBoar
     return bRetVal;
 }
 
+/**
+ * @brief make a list of marked player locations
+ * 
+ * @param pairCoords [in] coordinates of the marked player location
+ * @return true 
+ * @return false 
+ */
 bool ComputerBlocker::RememberMyPosition(const pair<int,int>& pairCoords)
 {
     bool retValue = true;
@@ -188,6 +267,13 @@ bool ComputerBlocker::RememberMyPosition(const pair<int,int>& pairCoords)
     return retValue;
 }
 
+/**
+ * @brief check if this location of the game board has already been mark by player
+ * 
+ * @param pairCoords [in] coordinates of the location to be marked by the player
+ * @return true     if ok to mark
+ * @return false    if location already marked
+ */
 bool ComputerBlocker::AlreadyMadeThisMove(const pair<int,int>& pairCoords)
 {
     bool retValue = true;
@@ -200,4 +286,30 @@ bool ComputerBlocker::AlreadyMadeThisMove(const pair<int,int>& pairCoords)
     }
 
     return retValue;
+}
+
+/**
+ * @brief determine unmarked locations on the game board
+ * 
+ * @param vecGameBoard  [in] game board matrix
+ * @return vector<pair<int,int>> 
+ */
+vector<pair<int,int>> ComputerBlocker::GetEmptySpaces(const vector<vector<int>>& vecGameBoard)
+{
+    vector<pair<int,int>> vecEmptySpaces;
+
+    int iGameBoardSize = vecGameBoard.size();
+
+    for(int i = 0; i < iGameBoardSize; i++)
+    {
+        for (int j = 0; j < iGameBoardSize; j++)
+        {
+            if(vecGameBoard.at(i).at(j) == -1)
+            {
+                vecEmptySpaces.push_back(pair<int,int>(i, j));
+            } 
+        }
+    }
+
+    return vecEmptySpaces;
 }
