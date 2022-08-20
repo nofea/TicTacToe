@@ -2,7 +2,6 @@
 
 .vs/
 .vscode/
-build_linux/
-build_windows/
+build/*
 Documentation/
 lintresults/
