@@ -4,6 +4,8 @@ WORKDIR /TicTacToe
 
 COPY . .
 
-RUN apt update
+RUN apt -y update
 
-RUN apt install -y $(cat requirements.txt)
+RUN apt -y install $(cat requirements.txt)
+
+CMD [ "bash" ]
