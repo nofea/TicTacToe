@@ -12,14 +12,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # install the following dependencies
-      # 1. windows cross compiler
     - name: Install dependencies
       id: install_dependencies 
-      run: |
-
-        sudo apt install mingw-w64
-        sudo apt-get install cppcheck 
+      run: echo "Dependencies are handled by the docker container now"
 
     - name: Check Out
       id: check_out

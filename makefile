@@ -1,38 +1,40 @@
-BUILD_DIR := ./bin
-BUILD_DIR_LINUX ?= $(BUILD_DIR)/build_linux
-BUILD_DIR_WINDOWS ?= $(BUILD_DIR)/build_windows
+include config.mk
 
-DOXYGEN := doxygen
-DOXYGEN_DIR := Documentation
+create_docker_image:
+	docker build -t $(DOCKER_CONTAINER) .
 
-LINT_DIR := lintresults
+linux: create_docker_image
+	docker run --mount type=bind,source=.,target=/TicTacToe --rm $(DOCKER_CONTAINER) $(MAKE) -f linux.mk
 
-all: 
-	$(MAKE) -f linux.mk
-	$(MAKE) -f windows.mk
+windows: create_docker_image
+	docker run --mount type=bind,source=.,target=/TicTacToe --rm $(DOCKER_CONTAINER) $(MAKE) -f windows.mk
 
-linux:
-	$(MAKE) -f linux.mk
+lint: create_docker_image
+	docker run --mount type=bind,source=.,target=/TicTacToe --rm $(DOCKER_CONTAINER) $(MAKE) -f lint.mk
 
-windows:
-	$(MAKE) -f windows.mk
+doc: create_docker_image
+	docker run --mount type=bind,source=.,target=/TicTacToe --rm $(DOCKER_CONTAINER) $(DOXYGEN) ttt_doxy
 
-lint:
-	$(MAKE) -f lint.mk
+run_linux: create_docker_image
+	docker run --mount type=bind,source=.,target=/TicTacToe --rm $(DOCKER_CONTAINER) $(BUILD_DIR_LINUX)/$(TARGET_EXEC_LINUX)
 
-doc:
-	$(DOXYGEN) ttt_doxy
-	
+all: linux windows
+
 .PHONY: clean
+
+clean_container:
+	docker image rm -f $(DOCKER_CONTAINER)
 
 clean:
 	$(RM) -r $(BUILD_DIR)
 
-cleanlint:
+clean_lint:
 	$(RM) -r $(LINT_DIR)
 
-cleandoc:
+clean_doc:
 	$(RM) -r $(DOXYGEN_DIR)
 
+very_clean:clean clean_lint clean_doc clean_container
+
 help:
-	@echo use "make [all|linux|windows|lint|doc|clean|cleanlint|cleandoc|help]" 
+	@echo use "make [all|linux|windows|run_linux|lint|doc|create_docker_image|clean|clean_lint|clean_doc|clean_container|very_clean|help]"

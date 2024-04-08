@@ -1,6 +1,5 @@
-TARGET_EXEC_LINUX ?= tictactoe.out
+include config.mk
 
-BUILD_DIR_LINUX ?= ./bin/build_linux
 SRC_DIRS ?= $(shell pwd)
 
 SRCS := $(shell find $(SRC_DIRS) -type f -name "*.cpp")

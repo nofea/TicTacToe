@@ -1,6 +1,5 @@
-TARGET_EXEC_WINDOWS ?= tictactoe.exe
+include config.mk
 
-BUILD_DIR_WINDOWS ?= ./bin/build_windows
 SRC_DIRS ?= $(shell pwd)
 
 SRCS := $(shell find $(SRC_DIRS) -type f -name "*.cpp")
