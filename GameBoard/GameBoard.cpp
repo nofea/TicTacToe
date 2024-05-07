@@ -92,7 +92,7 @@ bool GameBoard::IsEndOfGame()
     int iTemp = GAMEBOARDINITVALUE;
     list<int> listRowX, listRowO, listColX, listColO, listPDiaX, listPDiaO, listSDiaX, listSDiaO;   
     
-    for(int i = 0, k = iBoardSize - 1; (i < iBoardSize), (k >= 0); i++, k--)
+    for(int i = 0, k = iBoardSize - 1; (i < iBoardSize) && (k >= 0); i++, k--)
     {
         //check the rows and cols
         for(int j = 0; j < iBoardSize; j++)
@@ -253,7 +253,7 @@ bool GameBoard::SaveVictorySet(const Commons::MatrixProperties& Property, const 
         break;
 
         case objCommons->MatrixProperties_SecondaryDiagonal:
-        for(int iCount = 0, jCount = (iBoardSize - 1); (iCount < iBoardSize), (jCount >= 0); iCount++, jCount--)
+        for(int iCount = 0, jCount = (iBoardSize - 1); (iCount < iBoardSize) && (jCount >= 0); iCount++, jCount--)
         {
             listVictorySet.push_back(pair<int,int> {iCount, jCount});    
         }
