@@ -9,7 +9,7 @@ DOXYGEN_DIR:=Documentation
 
 LINT_DIR:=lintresults
 
-DOCKER_CONTAINER:=tic-tac-toe
+DOCKER_CONTAINER:=ghcr.io/nofea/tic-tac-toe
 
 TARGET_EXEC_LINUX?=tictactoe.out
 
