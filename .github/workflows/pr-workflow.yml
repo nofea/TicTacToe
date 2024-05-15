@@ -10,6 +10,11 @@ jobs:
   build:
   
     runs-on: ubuntu-latest
+    container: 
+      image: ghcr.io/nofea/tic-tac-toe:latest
+      credentials:
+        username: nofea
+        password: ${{secrets.REGISTRY_PASS}}
 
     steps:
       - name: Install dependencies
