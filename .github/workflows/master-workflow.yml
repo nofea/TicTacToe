@@ -56,10 +56,10 @@ jobs:
       run: | 
       
         mkdir Release
-        sudo mv bin/build_linux/tictactoe.out Release/tictactoe.out
-        sudo mv bin/build_windows/tictactoe.exe Release/tictactoe.exe
-        sudo mv Documentation.zip Release/Documentation.zip
-        sudo mv lintresults.zip Release/lintresults.zip
+        mv bin/build_linux/tictactoe.out Release/tictactoe.out
+        mv bin/build_windows/tictactoe.exe Release/tictactoe.exe
+        mv Documentation.zip Release/Documentation.zip
+        mv lintresults.zip Release/lintresults.zip
 
 
     - name: Create Release
