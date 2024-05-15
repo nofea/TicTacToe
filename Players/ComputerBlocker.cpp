@@ -188,7 +188,7 @@ bool ComputerBlocker::MakeVictoryConditionsList(int& iGameBoardSize)
 {
     list<pair<int,int>> listTempRow, listTempCol, listTempPDia, listTempSDia;
 
-    for(int j = 0, i = (iGameBoardSize - 1); (j < iGameBoardSize), (i >= 0); j++, i--)
+    for(int j = 0, i = (iGameBoardSize - 1); (j < iGameBoardSize) && (i >= 0); j++, i--)
     {
         for (int k = 0; k < iGameBoardSize; k++)
         {

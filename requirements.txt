@@ -1,1 +1,1 @@
-g++ doxygen gcc-mingw-w64 mingw-w64 cppcheck make
+apt-utils g++ doxygen gcc-mingw-w64 mingw-w64 cppcheck make
